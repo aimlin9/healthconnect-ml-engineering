@@ -321,8 +321,18 @@ y4 = m4["HighRiskPatient"]
 X4_train, X4_test, y4_train, y4_test = train_test_split(X4, y4, test_size=0.25, random_state=42, stratify=y4)
 
 rf4 = RandomForestClassifier(n_estimators=300, max_depth=6, class_weight="balanced", random_state=42).fit(X4_train, y4_train)
-evaluate_classifier("Random Forest", "High-Risk Patient Classification",
-                     y4_test, rf4.predict(X4_test), rf4.predict_proba(X4_test)[:, 1])
+cm4 = evaluate_classifier("Random Forest", "High-Risk Patient Classification",
+                           y4_test, rf4.predict(X4_test), rf4.predict_proba(X4_test)[:, 1])
+
+fig, ax = plt.subplots(figsize=(5, 4))
+sns.heatmap(cm4, annot=True, fmt="d", cmap="Blues",
+            xticklabels=["Low Risk", "High Risk"], yticklabels=["Low Risk", "High Risk"], ax=ax)
+ax.set_xlabel("Predicted")
+ax.set_ylabel("Actual")
+ax.set_title("Confusion Matrix — High-Risk Patient Classification (Recommended Model)")
+plt.tight_layout()
+plt.savefig(f"{FIG_DIR}/08_confusion_matrix_highrisk.png", dpi=120)
+plt.show()
 
 # %% [markdown]
 # ## 5. Part C — Regression Models
