@@ -415,6 +415,25 @@ print("Facility segmentation silhouette score:", round(silhouette_score(Xf, kmea
 facility_agg.groupby("Cluster")[fac_features].mean()
 
 # %% [markdown]
+# **Interpretation.** Patient segmentation (silhouette ≈ 0.27) separates four groups
+# primarily along age and chronic-condition lines: a younger chronic-condition cluster
+# (Cluster 1, avg age ~37, 100% chronic), an older chronic-condition cluster
+# (Cluster 2, avg age ~53), a non-chronic cluster (Cluster 0), and a smaller
+# frequent-visitor/high-billing cluster (Cluster 3, ~2 visits and markedly higher total
+# billing). **Recommendation**: route Clusters 1 and 2 into a chronic-disease
+# management programme (proactive follow-up, medication adherence outreach), and flag
+# Cluster 3 for case management given its disproportionate utilization and spend.
+#
+# Facility segmentation (silhouette ≈ 0.20, 3 clusters over only 20 facilities — a
+# small-N result to treat directionally) groups facilities mainly by appointment
+# volume and revenue rather than by admission rate or satisfaction, which are nearly
+# flat across clusters (consistent with the "no signal" finding in the Data Quality
+# Report). **Recommendation**: use this segmentation for *capacity* planning (which
+# facilities are high-volume/high-revenue and may need additional staffing or beds),
+# not for quality benchmarking — the data does not support distinguishing facilities
+# on quality in its current form.
+
+# %% [markdown]
 # ## 7. Part E — Anomaly Detection
 
 # %%
@@ -437,6 +456,19 @@ fac_z = (facility_agg["appointment_count"] - facility_agg["appointment_count"].m
 unusual_facilities = facility_agg.loc[fac_z.abs() > 1.5, ["FacilityID", "appointment_count"]]
 print("\nFacilities with unusually low/high patient volume (|z|>1.5):")
 print(unusual_facilities)
+
+# %% [markdown]
+# **Discussion.** Isolation Forest flags the top ~3% most statistically unusual
+# billing amounts and insurance claim amounts — a first-pass triage layer, not a
+# fraud verdict. In production this would route flagged transactions to a billing
+# auditor rather than auto-rejecting them (consistent with the Responsible AI
+# principle of human oversight in `docs/responsible_ai.md`). Combined with the
+# duplicate-phone-number finding (19,990/20,000 patients share a phone number with
+# another patient — see Data Quality Report) and the facility-volume outliers above,
+# anomaly detection here serves two purposes: (1) a fraud/billing-integrity triage
+# signal, and (2) a continuous data-quality monitor that catches record-linkage
+# problems (like the phone-number collisions) before they corrupt downstream
+# reporting.
 
 # %% [markdown]
 # ## 8. Part F — Model Explainability
@@ -464,6 +496,17 @@ else:
     print("SHAP not installed in this environment — feature importance above substitutes.")
 
 # %% [markdown]
+# **Why this matters for trust.** In a clinical setting, a bare risk score ("82%
+# admission risk") is not actionable and is hard for a clinician to trust or
+# challenge. Surfacing *which* features drove a given prediction (age, prior
+# admissions, department workload, etc. — via feature importance globally and SHAP
+# per-prediction) lets a clinician or administrator sanity-check the model against
+# their own judgment, challenge a prediction that rests on an implausible driver, and
+# meets the Responsible AI commitment in `docs/responsible_ai.md` that predictions
+# are decision-support, not a black-box verdict. It also gives the model-governance
+# process (Part H) something concrete to audit when performance drifts.
+
+# %% [markdown]
 # ## 9. Part G — Model Comparison
 
 # %%
@@ -478,6 +521,28 @@ reg_summary_df
 summary_df.to_csv("../models/classification_model_comparison.csv", index=False)
 reg_summary_df.to_csv("../models/regression_model_comparison.csv", index=False)
 print("Saved model comparison tables to models/")
+
+# %% [markdown]
+# **Final model selection.** Every classification model here performs at or only
+# modestly above its majority-class baseline, and every regression model performs at
+# or below a naive mean-prediction baseline (negative R² throughout) — see the
+# "Signal Check" section of `reports/data_quality_report.md` for why: the outcome
+# fields do not vary meaningfully with the clinical/operational fields in this
+# synthetic dataset. The one exception is **High-Risk Patient Classification**
+# (Random Forest, 74.6% accuracy vs. 57.6% baseline, ROC-AUC 0.73) — expected, since
+# its target is a composite built directly from the same clinical fields used as
+# model inputs, so the model is recovering a learnable rule rather than discovering
+# a hidden pattern in noise.
+#
+# **Recommended for deployment (of these candidates): the High-Risk Patient
+# classifier**, as the only model with evidence of real predictive lift, with the
+# explicit caveat that it formalizes an existing clinical rule rather than
+# discovering new risk factors. The other five models are recommended to be
+# **re-trained once real (non-synthetic) HealthConnect Rwanda data is available**,
+# since the pipeline, feature engineering and evaluation harness built here are
+# reusable as-is — only the data's actual signal content needs to improve, not the
+# approach. The full comparison table above and the Data Quality Report together
+# make this a founded, evidence-based recommendation rather than an inflated claim.
 
 # %% [markdown]
 # ## 10. Summary of Findings (feeds the Executive Summary / Business Recommendations)
