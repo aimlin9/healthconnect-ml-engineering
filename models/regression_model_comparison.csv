@@ -1,0 +1,5 @@
+algorithm,business_problem,rmse,baseline_rmse,mae,r2,mape_pct
+Linear Regression,Revenue Prediction,83291.96,83053.27,71983.35,-0.009,115.6
+Random Forest Regressor,Revenue Prediction,84276.23,83053.27,72632.17,-0.033,115.9
+Gradient Boosting Regressor,Revenue Prediction,84406.98,83053.27,72823.96,-0.036,115.3
+Random Forest Regressor,Length of Stay Prediction,2.96,2.88,2.44,-0.084,105.0

@@ -1,0 +1,29 @@
+{
+  "n_patients": 20000,
+  "n_appointments_with_context": 5000,
+  "n_diagnoses_full_scale": 60000,
+  "n_billing_full_scale": 60000,
+  "duplicate_patient_ids": 0,
+  "duplicate_appointment_ids": 0,
+  "duplicate_phone_numbers": 19990,
+  "invalid_facility_ids_in_appointments": 0,
+  "invalid_department_ids_in_appointments": 0,
+  "impossible_ages": 0,
+  "invalid_billing_amounts": 0,
+  "pct_diagnoses_with_known_appointment_context": 8.3,
+  "pct_billing_with_known_appointment_context": 8.3,
+  "pct_lab_tests_with_known_appointment_context": 45.4,
+  "pct_prescriptions_with_known_appointment_context": 80.1,
+  "pct_admissions_with_known_appointment_context": 11.7,
+  "pct_referrals_with_known_appointment_context": 8.8,
+  "insurance_claim_status_values": [
+    "Approved",
+    "Pending"
+  ],
+  "core_rows": 5000,
+  "core_cols": 58,
+  "admission_rate_pct": 11.7,
+  "feedback_coverage_pct": 35.1,
+  "n_facilities": 20,
+  "n_departments": 200
+}

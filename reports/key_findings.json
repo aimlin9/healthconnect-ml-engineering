@@ -1,0 +1,9 @@
+{
+  "admission_rate_pct": 11.7,
+  "avg_satisfaction": 2.93,
+  "avg_billing_amount": 154226.69,
+  "pct_uninsured": 0.0,
+  "high_risk_patient_pct": 42.4,
+  "anomalous_billing_pct": 3.0,
+  "anomalous_claims_pct": 3.0
+}

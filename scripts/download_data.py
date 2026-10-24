@@ -28,8 +28,7 @@ def slugify(name: str) -> str:
 
 
 def download_drive_file(file_id: str, dest_stub: Path) -> Path:
-    url = f"https://drive.google.com/uc?id={file_id}"
-    out = gdown.download(url, str(dest_stub) + ".download", quiet=False, fuzzy=True)
+    out = gdown.download(id=file_id, output=str(dest_stub) + ".download", quiet=False)
     if out is None:
         raise RuntimeError(f"gdown failed for file_id={file_id}")
     out_path = Path(out)

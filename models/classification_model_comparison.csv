@@ -1,0 +1,6 @@
+algorithm,business_problem,accuracy,baseline_accuracy,precision,recall,f1,roc_auc
+Logistic Regression,Hospital Admission Prediction,0.522,0.883,0.125,0.514,0.201,0.527
+Random Forest,Hospital Admission Prediction,0.725,0.883,0.107,0.185,0.136,0.512
+Random Forest,Patient Satisfaction Prediction,0.335,0.41,0.326,0.322,0.322,
+Random Forest,Insurance Claim Approval Prediction,0.478,0.504,0.483,0.498,0.49,0.482
+Random Forest,High-Risk Patient Classification,0.746,0.576,0.782,0.555,0.649,0.727
