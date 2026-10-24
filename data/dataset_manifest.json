@@ -1,0 +1,164 @@
+[
+  {
+    "dataset": "Countries",
+    "url": "https://drive.google.com/file/d/1eLH8LMntRv4ZCxWmZegAcM4m02JD6IFn/view?usp=sharing",
+    "kind": "drive_file",
+    "file_id": "1eLH8LMntRv4ZCxWmZegAcM4m02JD6IFn"
+  },
+  {
+    "dataset": "Provinces",
+    "url": "https://drive.google.com/file/d/1LYlJLZOoCtdJOLnijggyPwWIlkv6CfJP/view?usp=sharing",
+    "kind": "drive_file",
+    "file_id": "1LYlJLZOoCtdJOLnijggyPwWIlkv6CfJP"
+  },
+  {
+    "dataset": "Districts",
+    "url": "https://drive.google.com/file/d/1HYXgBxx-K5ZZ49ZNd5HXeUCZxYyPlnN4/view?usp=sharing",
+    "kind": "drive_file",
+    "file_id": "1HYXgBxx-K5ZZ49ZNd5HXeUCZxYyPlnN4"
+  },
+  {
+    "dataset": "Sectors",
+    "url": "https://drive.google.com/file/d/1u-y9dwV3UJBzW2U7MxZGNlxwLnvfhzvQ/view?usp=sharing",
+    "kind": "drive_file",
+    "file_id": "1u-y9dwV3UJBzW2U7MxZGNlxwLnvfhzvQ"
+  },
+  {
+    "dataset": "Villages",
+    "url": "https://drive.google.com/file/d/19R_E3_O9Hx8NQMz84OqiwN8BPg11QD3W/view?usp=sharing",
+    "kind": "drive_file",
+    "file_id": "19R_E3_O9Hx8NQMz84OqiwN8BPg11QD3W"
+  },
+  {
+    "dataset": "Ownership Types",
+    "url": "https://drive.google.com/file/d/1uxxK447ZiXq43ufJfkh127deLdOEabZO/view?usp=sharing",
+    "kind": "drive_file",
+    "file_id": "1uxxK447ZiXq43ufJfkh127deLdOEabZO"
+  },
+  {
+    "dataset": "Health Facilities",
+    "url": "https://docs.google.com/spreadsheets/d/1QTUksqvCoUqyg6ruwj55dHzYqblOySQv/edit?usp=sharing&ouid=112378631926353872056&rtpof=true&sd=true",
+    "kind": "sheet",
+    "file_id": "1QTUksqvCoUqyg6ruwj55dHzYqblOySQv"
+  },
+  {
+    "dataset": "Departments",
+    "url": "https://drive.google.com/file/d/15OsSQm2vfjNU7W7LHkK0PI1i89q2w0BU/view?usp=sharing",
+    "kind": "drive_file",
+    "file_id": "15OsSQm2vfjNU7W7LHkK0PI1i89q2w0BU"
+  },
+  {
+    "dataset": "Medical Specialties",
+    "url": "https://drive.google.com/file/d/1gSxj2KHcy51_33xopiLHy3HUOgI3yOf6/view?usp=sharing",
+    "kind": "drive_file",
+    "file_id": "1gSxj2KHcy51_33xopiLHy3HUOgI3yOf6"
+  },
+  {
+    "dataset": "Healthcare Services",
+    "url": "https://drive.google.com/file/d/1WxzgKH17BmxQvsS4hjdYziqlL2B1cPn8/view?usp=sharing",
+    "kind": "drive_file",
+    "file_id": "1WxzgKH17BmxQvsS4hjdYziqlL2B1cPn8"
+  },
+  {
+    "dataset": "Medical Equipment",
+    "url": "https://drive.google.com/file/d/1riRIJyWrwemhYq8Mf1khJgWy-jjtHhoA/view?usp=sharing",
+    "kind": "drive_file",
+    "file_id": "1riRIJyWrwemhYq8Mf1khJgWy-jjtHhoA"
+  },
+  {
+    "dataset": "Rooms",
+    "url": "https://drive.google.com/file/d/1gVFEWZ8eVwFiHw3NFtkstLta85osi1YG/view?usp=sharing",
+    "kind": "drive_file",
+    "file_id": "1gVFEWZ8eVwFiHw3NFtkstLta85osi1YG"
+  },
+  {
+    "dataset": "Beds",
+    "url": "https://drive.google.com/file/d/1_Ct3iwrtBpx8jHUltcstphTEnZnTLLd5/view?usp=sharing",
+    "kind": "drive_file",
+    "file_id": "1_Ct3iwrtBpx8jHUltcstphTEnZnTLLd5"
+  },
+  {
+    "dataset": "Doctors",
+    "url": "https://drive.google.com/file/d/1g3cRESQRk-uj4ossOgKwIPA3VfjtTw89/view?usp=sharing",
+    "kind": "drive_file",
+    "file_id": "1g3cRESQRk-uj4ossOgKwIPA3VfjtTw89"
+  },
+  {
+    "dataset": "Nurses",
+    "url": "https://drive.google.com/file/d/1YW6sef9tHJkB_10lS0mrRWYbt76X1cqV/view?usp=sharing",
+    "kind": "drive_file",
+    "file_id": "1YW6sef9tHJkB_10lS0mrRWYbt76X1cqV"
+  },
+  {
+    "dataset": "Pharmacists",
+    "url": "https://drive.google.com/file/d/1doFvT_sn3Wc51vO82OHj-rowbdEsL7ma/view?usp=sharing",
+    "kind": "drive_file",
+    "file_id": "1doFvT_sn3Wc51vO82OHj-rowbdEsL7ma"
+  },
+  {
+    "dataset": "Laboratory Scientists",
+    "url": "https://drive.google.com/file/d/1pyQLZ4h3Xr53-ZbATPw5MMxKTNB8ngHR/view?usp=sharing",
+    "kind": "drive_file",
+    "file_id": "1pyQLZ4h3Xr53-ZbATPw5MMxKTNB8ngHR"
+  },
+  {
+    "dataset": "Radiographers",
+    "url": "https://drive.google.com/file/d/1nexSktXT6cWB_1ZOx8cwWhd8PQA_YsNr/view?usp=sharing",
+    "kind": "drive_file",
+    "file_id": "1nexSktXT6cWB_1ZOx8cwWhd8PQA_YsNr"
+  },
+  {
+    "dataset": "Administrative Staff",
+    "url": "https://drive.google.com/file/d/1g9Ahw5JyrC-HY37167NJYOlR5ru55QMT/view?usp=sharing",
+    "kind": "drive_file",
+    "file_id": "1g9Ahw5JyrC-HY37167NJYOlR5ru55QMT"
+  },
+  {
+    "dataset": "Patients",
+    "url": "https://drive.google.com/file/d/15Vw2p-V4B7W0iA9L_k9VUFjTrbj39psh/view?usp=sharing",
+    "kind": "drive_file",
+    "file_id": "15Vw2p-V4B7W0iA9L_k9VUFjTrbj39psh"
+  },
+  {
+    "dataset": "Diagnoses",
+    "url": "https://drive.google.com/file/d/1xksC3xmZW1fEkuZpsCtJBHHw1XS9j5_v/view?usp=sharing",
+    "kind": "drive_file",
+    "file_id": "1xksC3xmZW1fEkuZpsCtJBHHw1XS9j5_v"
+  },
+  {
+    "dataset": "Clinical Transactions",
+    "url": "https://docs.google.com/spreadsheets/d/1lGKk5ppaLvWPBsMNmud0DXIhlujcxsRA/edit?usp=sharing&ouid=112378631926353872056&rtpof=true&sd=true",
+    "kind": "sheet",
+    "file_id": "1lGKk5ppaLvWPBsMNmud0DXIhlujcxsRA"
+  },
+  {
+    "dataset": "Billing",
+    "url": "https://drive.google.com/file/d/1_iG-RnobA9Yi5s_bU6eudkrVHOWUgWiP/view?usp=sharing",
+    "kind": "drive_file",
+    "file_id": "1_iG-RnobA9Yi5s_bU6eudkrVHOWUgWiP"
+  },
+  {
+    "dataset": "Insurance Claims",
+    "url": "https://drive.google.com/file/d/1S2lxqWSABB2iLYZkRWHb31idPsHSc0h9/view?usp=sharing",
+    "kind": "drive_file",
+    "file_id": "1S2lxqWSABB2iLYZkRWHb31idPsHSc0h9"
+  },
+  {
+    "dataset": "Payments",
+    "url": "https://drive.google.com/file/d/1nzxMGpWJPtVFwWmyhA_bGRWMbBFqEd9X/view?usp=sharing",
+    "kind": "drive_file",
+    "file_id": "1nzxMGpWJPtVFwWmyhA_bGRWMbBFqEd9X"
+  },
+  {
+    "dataset": "Patient Feedback",
+    "url": "https://drive.google.com/file/d/1OFDTCEo5dSqjYEg7b2ep6MdUdZoosRXK/view?usp=sharing",
+    "kind": "drive_file",
+    "file_id": "1OFDTCEo5dSqjYEg7b2ep6MdUdZoosRXK"
+  },
+  {
+    "dataset": "Revenue Summary",
+    "url": "https://drive.google.com/file/d/1JfWK7bpyDJUE9EZC_0uWTlKac7g0SGEi/view?usp=sharing",
+    "kind": "drive_file",
+    "file_id": "1JfWK7bpyDJUE9EZC_0uWTlKac7g0SGEi"
+  }
+]
