@@ -50,7 +50,11 @@ AnalystLab_Week6/
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-python scripts/download_data.py
+python scripts/download_data.py              # pulls the 27 source datasets
+python scripts/01_build_core_dataset.py       # validate, clean, integrate -> data/processed/
+python scripts/02_feature_engineering.py      # -> data/feature_engineered/healthconnect_features.csv
+python scripts/py_to_ipynb.py notebooks/healthconnect_ml_track.py   # build + execute the notebook
+python scripts/build_presentation.py          # -> presentation/*.pptx
 ```
 
 ## Data
@@ -60,8 +64,40 @@ links). `data/dataset_manifest.json` records the dataset name, source URL and fi
 fetch each one. Two multi-tab workbooks (`Health Facilities`, `Clinical Transactions`) are
 exported as `.xlsx` and split per sheet during cleaning, since each tab represents a distinct
 entity (e.g. Clinical Transactions -> Appointments, Diagnoses, Laboratory Tests, Prescriptions,
-Admissions, Referrals).
+Admissions, Referrals). See `docs/table_relationships.md` for how all 27 tables relate, and
+`reports/data_quality_report.md` for the key scope/coverage finding that drives everything
+downstream (only 5,000 of 60,000 appointments carry full patient/doctor/facility context).
+
+## Results (headline numbers)
+
+- 5,000-appointment integrated analytical dataset, 75 engineered features.
+- 4 classification models + 2 regression models, every one benchmarked against an explicit
+  baseline (majority-class / mean-prediction) — not reported in isolation.
+- **Only the High-Risk Patient classifier shows real predictive lift** (74.6% accuracy vs.
+  57.6% baseline, ROC-AUC 0.73) — recommended for deployment. The other five models perform
+  at or below baseline because the outcome fields do not vary meaningfully with the available
+  features in this synthetic dataset (verified with hypothesis tests, not assumed). Full
+  honest breakdown: `reports/model_evaluation_report.md`.
+- Patient segmentation (4 clusters) and facility segmentation (3 clusters) via K-Means;
+  anomaly detection on billing/claims via Isolation Forest.
+- Model explainability via feature importance + SHAP (`reports/explainable_ai_report.md`).
+
+## Deliverables Checklist (ML Engineering Track)
+
+| Deliverable | Location |
+|---|---|
+| Machine Learning Notebook (.ipynb) | `notebooks/healthconnect_ml_track.ipynb` |
+| Cleaned and feature-engineered dataset | `data/feature_engineered/healthconnect_features.csv` |
+| Model Evaluation Report | `reports/model_evaluation_report.md` |
+| Explainable AI Report | `reports/explainable_ai_report.md` |
+| Confusion Matrices and Evaluation Metrics | notebook Part G + `models/*_comparison.csv` + `reports/figures/08_confusion_matrix_highrisk.png` |
+| Model Comparison Table | `reports/model_evaluation_report.md` |
+| Deployment Architecture Diagram | `docs/deployment_architecture.md` |
+| Executive Summary (3–5 pages) | `reports/executive_summary.md` |
+| Presentation Slides (10–15 slides) | `presentation/HealthConnect_Week6_ML_Track_Presentation.pptx` |
+| Responsible / Ethical AI | `docs/responsible_ai.md` |
+| Data Quality Report | `reports/data_quality_report.md` |
 
 ## Status
 
-Work in progress — Week 6 submission, deadline Sunday 11:59 PM WAT.
+Week 6 submission — complete.
