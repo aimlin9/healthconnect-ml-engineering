@@ -27,10 +27,16 @@ deployed against real HealthConnect Rwanda data.
 
 ### Bias and Fairness
 
-- Model performance (precision/recall/AUC) is evaluated **by subgroup** (province,
+- Model performance (precision/recall/AUC) must be evaluated **by subgroup** (province,
   facility type, age group, gender, insurance status), not only in aggregate, so that a
   model that works well overall but poorly for a specific province or facility type is
   caught before deployment.
+- **Done in this project:** the recommended high-risk classifier was evaluated per
+  facility and with leave-one-facility-out validation (ROC-AUC 0.70–0.79 on unseen
+  facilities; recall is the weak point) — see `reports/model_evaluation_report.md`.
+  **Not yet done:** province and facility-type slices (the source data does not link
+  facilities to a district or ownership type) and age group / gender / insurance
+  slices. These remain open items before any real deployment.
 - Chronic-disease and risk features are checked for proxies that could encode
   socioeconomic or geographic bias (e.g. facility type standing in for ability to pay).
 - Any observed fairness gap is documented and mitigated (reweighting, threshold

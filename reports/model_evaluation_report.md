@@ -38,6 +38,25 @@ admission history — the model formalizes an existing, auditable clinical rule 
 than discovering a new relationship, which is itself a legitimate and useful ML
 application (consistent, scalable rule application with SHAP-explainable output).
 
+### Performance Across Facilities
+
+The aggregate score was checked for facility-level gaps (notebook section 4.5):
+
+- **Per facility (test split):** the model beats each facility's own majority-class
+  baseline at **20 / 20** facilities (accuracy 0.61–0.88, ROC-AUC 0.61–0.86). Each
+  facility contributes only 41–77 test patients, so the spread between facilities is
+  largely sampling noise; HF004 is the narrowest margin (0.614 vs. 0.596 baseline).
+- **Leave-one-facility-out** (train on 19, test on the held-out facility, ~250 patients
+  each): ROC-AUC **0.70–0.79** (median 0.75), accuracy 0.70–0.80. The model transfers
+  to facilities it was not trained on without meaningful degradation.
+- **Weakness — recall:** 0.41–0.73 per facility on the test split and 0.48–0.65
+  leave-one-facility-out. At the default 0.5 threshold the model misses a large share
+  of high-risk patients at some sites; deployment requires a lower, clinically chosen
+  threshold.
+- **Not tested:** province and facility type. The source data has no table linking
+  `FacilityID` to a district or ownership type, so these subgroup checks remain a
+  prerequisite for real deployment (see `docs/responsible_ai.md`).
+
 Every other model (admission, satisfaction, claim approval, revenue, length of stay)
 performs at or below its baseline. This is **not a pipeline failure** — the same
 ingestion, cleaning, feature-engineering, training and evaluation harness is reused

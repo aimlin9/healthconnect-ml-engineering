@@ -335,6 +335,58 @@ plt.savefig(f"{FIG_DIR}/08_confusion_matrix_highrisk.png", dpi=120)
 plt.show()
 
 # %% [markdown]
+# ### 4.5 High-Risk Classifier — Performance Across Facilities
+# An aggregate score can hide a model that works well overall but poorly at specific
+# sites. Two checks: (1) the test-split metrics sliced by facility, compared with each
+# facility's own majority-class baseline; (2) leave-one-facility-out — train on 19
+# facilities, test on the held-out one — which asks whether the model transfers to a
+# facility it has never seen. Province and facility type cannot be tested: the source
+# data has no table linking `FacilityID` to a district or ownership type.
+
+# %%
+fac_test = pd.DataFrame({"FacilityID": df.loc[X4_test.index, "FacilityID"], "y": y4_test,
+                         "pred": rf4.predict(X4_test), "proba": rf4.predict_proba(X4_test)[:, 1]})
+per_facility = []
+for fac, g in fac_test.groupby("FacilityID"):
+    per_facility.append({
+        "FacilityID": fac, "n_test": len(g),
+        "accuracy": accuracy_score(g["y"], g["pred"]),
+        "baseline": max(g["y"].mean(), 1 - g["y"].mean()),
+        "precision": precision_score(g["y"], g["pred"], zero_division=0),
+        "recall": recall_score(g["y"], g["pred"], zero_division=0),
+        "roc_auc": roc_auc_score(g["y"], g["proba"]) if g["y"].nunique() > 1 else np.nan,
+    })
+per_facility = pd.DataFrame(per_facility).round(3)
+print("Facilities beating their own baseline:",
+      int((per_facility["accuracy"] > per_facility["baseline"]).sum()), "/", len(per_facility))
+print(per_facility.to_string(index=False))
+
+m4_fac = df.loc[m4.index, "FacilityID"]
+lofo = []
+for fac in sorted(m4_fac.unique()):
+    held = m4_fac == fac
+    rf_lofo = RandomForestClassifier(n_estimators=300, max_depth=6, class_weight="balanced",
+                                     random_state=42).fit(X4[~held], y4[~held])
+    proba = rf_lofo.predict_proba(X4[held])[:, 1]
+    lofo.append({"FacilityID": fac, "n": int(held.sum()),
+                 "accuracy": accuracy_score(y4[held], proba > 0.5),
+                 "recall": recall_score(y4[held], proba > 0.5),
+                 "roc_auc": roc_auc_score(y4[held], proba)})
+lofo = pd.DataFrame(lofo).round(3)
+print("\nLeave-one-facility-out:")
+lofo[["accuracy", "recall", "roc_auc"]].describe().loc[["min", "50%", "max", "std"]].round(3)
+
+# %% [markdown]
+# **Interpretation:** the high-risk classifier holds up across facilities — it beats each
+# facility's own baseline, and on facilities excluded from training its ROC-AUC stays in
+# a narrow band around the aggregate figure. Per-facility test slices are small (roughly
+# 40–80 patients), so differences between individual facilities in the first table are
+# mostly sampling noise; the leave-one-facility-out result (~250 patients per facility)
+# is the more reliable transfer estimate. The consistent weakness is **recall**: at the
+# default 0.5 threshold the model misses a large share of high-risk patients at some
+# sites, so a deployment would need a lower, clinically chosen threshold.
+
+# %% [markdown]
 # ## 5. Part C — Regression Models
 
 # %%
