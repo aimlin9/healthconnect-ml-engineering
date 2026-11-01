@@ -27,13 +27,15 @@
 6. **Retest results:** 14/14 probes, 61/61 tests, 5/5 mutations caught; recall 0.555 → 0.785
    (0.817 median on unseen facilities); fresh clone reproduced an identical model.
 
-7. **Tracks collaborated with:** Data Science (primary), Project Management, Data Analytics —
-   **[TO COMPLETE with your actual HC-POD exchange; see report §10]**
+7. **Tracks collaborated with:** I asked Data Science to collaborate; no response had arrived by
+   the deadline. The issue and decision logs are ready for Project Management.
 
-8. **Tested collaboratively:** **[TO COMPLETE — suggested: DS scores their validation rows through
-   `predict.py` and compares with their notebook]**
+8. **Tested collaboratively:** not yet. The planned test (DS scores their validation rows through
+   `predict.py` and compares the results with their notebook) is set out in report §10 and will
+   run once Data Science responds.
 
-9. **What changed as a result:** **[TO COMPLETE after the cross-track test]**
+9. **What changed as a result:** nothing yet from cross-track work. The threshold (ISS-09) and
+   label-leakage (ISS-08) decisions are waiting on Data Science.
 
 10. **Key validation outcome:** the Week 6 model's performance was genuine (not driven by leakage);
     the pipeline around it was not deployable and now is.

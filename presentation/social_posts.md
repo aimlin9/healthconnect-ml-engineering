@@ -1,19 +1,5 @@
 # LinkedIn & X Posts — Week 6
-
-Fill in the GitHub repo link once pushed: `https://github.com/aimlin9/healthconnect-ml-engineering`
-
-Suggested screenshots to attach (both platforms): the SHAP summary plot
-(`reports/figures/07_shap_summary_admission.png`), the confusion matrix
-(`reports/figures/08_confusion_matrix_highrisk.png`), and a VS Code screenshot of the
-executed notebook (`notebooks/healthconnect_ml_track.ipynb`) open with outputs
-visible.
-
----
-
-## LinkedIn
-
-Week 6 of the AnalystLab Africa Experience Lab Internship (Machine Learning
-Engineering track) is done: an end-to-end ML pipeline for HealthConnect Rwanda, a
+xpipeline for HealthConnect Rwanda, a
 simulated multi-facility healthcare network.
 
 What I built:

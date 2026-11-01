@@ -160,7 +160,7 @@ ERROR hc_pipeline: no output written (2 problem(s)); fix the input or use --skip
 $ python scripts/predict.py sample_input.csv scored.csv --skip-invalid --log-file run.log
 INFO  hc_pipeline: loaded model 1.1.0-week7 (threshold 0.33)
 WARNING hc_pipeline: rejected 2 of 8 row(s) failing validation
-INFO  hc_pipeline: scored 6 row(s), flagged 4 high-risk, rejected 2, 82.3 ms
+INFO  hc_pipeline: scored 6 row(s), flagged 4 high-risk, rejected 2, 84.0 ms
 [exit code 0]
 ```
 
@@ -261,29 +261,24 @@ Full issue log with owners and status: `reports/week7/issue_log.csv`.
 
 ## 10. HC-POD Cross-Track Testing
 
-The pipeline has three real cross-track dependencies. The engineering side of each is done and
-evidenced above; the fields marked **[TO COMPLETE]** need the actual exchange with your HC-POD
-teammate and must be filled in with what really happened — do not submit them as placeholders.
+**Status at submission: requested, no response yet — cross-track test not completed.**
+I asked the Data Science track to collaborate on testing the pipeline. No feedback had arrived
+by the Week 7 deadline, so the joint Test → Finding → Action → Retest cycle has not happened. The
+ML Engineering side is ready, and the steps below will be completed and recorded as soon as Data
+Science responds. Nothing in this section claims a collaboration that has not taken place.
 
 | # | Field | Data Science ↔ ML Engineering (primary) |
 |---|---|---|
-| 1 | Track collaborated with | Data Science — **[TO COMPLETE: teammate name]** |
+| 1 | Track collaborated with | Data Science — collaboration requested; awaiting response |
 | 2 | Project dependency | The pipeline serves the Data Science candidate model; DS owns the target definition and operating threshold |
-| 3 | Component tested | High-Risk Patient pipeline: input contract, feature definitions, threshold |
-| 4 | Received | **[TO COMPLETE: what DS sent — e.g. their candidate model's features/threshold, or confirmation of the label rule]** |
-| 5 | Provided | Input contract (`config.py`), model artifact + metadata, threshold operating-point table (§6), findings ISS-04 (feature leakage), ISS-05 (constant feature), ISS-08 (label leakage), ISS-09 (threshold) |
-| 6 | Testing activity | **[TO COMPLETE: e.g. DS scored their validation rows through `scripts/predict.py` and compared against their notebook]** |
-| 7 | Finding | **[TO COMPLETE]** |
-| 8 | Action taken | **[TO COMPLETE]** |
-| 9 | Retest result | **[TO COMPLETE]** |
-| 10 | What changed | **[TO COMPLETE]** |
-| 11 | Evidence | **[TO COMPLETE: commit / screenshot / message link]** |
-| 12 | How it improved HealthConnect | **[TO COMPLETE]** |
+| 3 | Component to be tested | High-Risk Patient pipeline: input contract, feature definitions, threshold |
+| 4 | Received | Nothing yet |
+| 5 | Ready to provide | Input contract (`config.py`), model artifact + metadata, threshold operating-point table (§6), findings ISS-04 (feature leakage), ISS-05 (constant feature), ISS-08 (label leakage), ISS-09 (threshold) |
+| 6 | Planned testing activity | DS exports 20–50 of their validation rows to CSV → `python scripts/predict.py rows.csv out.csv` → compare `risk_probability` with the DS notebook; any mismatch is a contract issue to fix and retest. DS chooses the operating threshold from the §6 table (closes ISS-09) and decides on ISS-08. |
+| 7–12 | Finding, action, retest, what changed, evidence, impact | Pending the DS response; will be added to this report and the issue log |
 
-Suggested concrete test to run with Data Science (gives a genuine Test → Finding → Action → Retest):
-DS exports 20–50 of their validation rows to CSV → run `python scripts/predict.py rows.csv out.csv`
-→ compare `risk_probability` with their notebook's output → any mismatch is a contract issue to
-fix and retest. Also ask DS to choose the threshold from the §6 table (closes ISS-09).
+Because no DS feedback arrived, the threshold (ISS-09) and label-leakage (ISS-08) decisions stay
+open and are carried into Week 8.
 
 Other dependencies to report: **Project Management** — issue log and decision log in this package
 feed their Integration & Issue Log. **Data Analytics** — confirm the valid ranges in `config.py`
@@ -319,10 +314,10 @@ testing beyond the logged ~80 ms for a small batch; no test of concurrent use.
 | Automated tests | Ready — 61 tests, mutation-checked |
 | Threshold / operating point | **Blocked on DS decision (ISS-09)** |
 | Target label leakage | **Needs DS decision (ISS-08)** |
-| Cross-track test with DS | **To complete (§10)** |
+| Cross-track test with DS | **Requested, no response by deadline (§10)** |
 | Serving interface for final integration | CLI + Python API available; HTTP wrapper only if the Week 8 plan needs it |
 
-**Before Week 8:** (1) run the DS cross-track test in §10 and record the real outcome;
+**Before Week 8:** (1) follow up with Data Science, run the cross-track test in §10 and record the real outcome;
 (2) get the threshold decision; (3) agree with DS whether to fix ISS-08 now or document it;
 (4) agree the integration interface with Project Management.
 

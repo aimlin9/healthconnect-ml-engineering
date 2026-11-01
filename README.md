@@ -149,9 +149,10 @@ Input columns: `Gender`, `VisitType`, `Age`, `DoctorYearsExperience`, `PriorAppo
 | End-to-end demo | `reports/week7/evidence/cli_demo/` |
 | Issue log / decision log | `reports/week7/issue_log.csv`, `reports/week7/decision_log.md` |
 | Configuration / dependencies | `src/hc_pipeline/config.py`, `requirements.txt`, report §7–§8 |
+| LinkedIn / X post drafts + images | `presentation/week7/` (images built by `scripts/week7_post_images.py`) |
 
 ## Status
 
 Week 6 submission — complete.
 Week 7 — pipeline tested, refined and retested; cross-track test with Data Science and the
-threshold decision are open (report §10, ISS-09).
+threshold decision are open — collaboration requested from Data Science, no response by the deadline (report §10, ISS-09).
