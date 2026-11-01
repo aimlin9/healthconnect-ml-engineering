@@ -1,0 +1,3 @@
+csv_line,column,problem
+7,VisitType,"unknown category 'Telehealth'; allowed ['Consultation', 'Emergency', 'Follow-up']"
+4,Age,"250 outside valid range [0, 120]"

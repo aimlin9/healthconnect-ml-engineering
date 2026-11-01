@@ -1,0 +1,114 @@
+[
+  {
+    "id": "W6-01",
+    "area": "Persistence",
+    "scenario": "A trained model artifact exists that a service could load",
+    "expected": "Serialized model + metadata in models/",
+    "actual": "model files found: none \u2014 model exists only in notebook memory",
+    "result": "FAIL"
+  },
+  {
+    "id": "W6-02",
+    "area": "Model integration",
+    "scenario": "Score a large batch containing every category",
+    "expected": "One probability per row",
+    "actual": "1250 probabilities for 1250 mixed-category rows",
+    "result": "PASS"
+  },
+  {
+    "id": "W6-03",
+    "area": "Preprocessing",
+    "scenario": "Score a single patient (the real-time use case)",
+    "expected": "One probability",
+    "actual": "ValueError: The feature names should match those that were passed during fit.",
+    "result": "FAIL"
+  },
+  {
+    "id": "W6-04",
+    "area": "Preprocessing",
+    "scenario": "Score a batch where every patient is an Emergency visit",
+    "expected": "One probability per row",
+    "actual": "ValueError: The feature names should match those that were passed during fit.",
+    "result": "FAIL"
+  },
+  {
+    "id": "W6-05",
+    "area": "Input validation",
+    "scenario": "Unseen category (VisitType='Telehealth')",
+    "expected": "Clear rejection naming the bad value",
+    "actual": "ValueError: The feature names should match those that were passed during fit.",
+    "result": "FAIL"
+  },
+  {
+    "id": "W6-06",
+    "area": "Input validation",
+    "scenario": "Required column missing (DepartmentWorkload)",
+    "expected": "Clear error naming the missing column",
+    "actual": "KeyError: \"['DepartmentWorkload'] not in index\"",
+    "result": "FAIL"
+  },
+  {
+    "id": "W6-07",
+    "area": "Input validation",
+    "scenario": "Age supplied as text (e.g. '45' from a CSV/form)",
+    "expected": "Coerced to number, or clear type error",
+    "actual": "ValueError: The feature names should match those that were passed during fit.",
+    "result": "FAIL"
+  },
+  {
+    "id": "W6-08",
+    "area": "Input validation",
+    "scenario": "Impossible values (Age = -5 and 250)",
+    "expected": "Rejected with the offending rows",
+    "actual": "silently scored impossible ages: [0.348, 0.764]",
+    "result": "FAIL"
+  },
+  {
+    "id": "W6-09",
+    "area": "Input validation",
+    "scenario": "Missing value (Age = NaN)",
+    "expected": "Rejected with the offending rows",
+    "actual": "silently scored missing Age: [0.325, 0.279]",
+    "result": "FAIL"
+  },
+  {
+    "id": "W6-10",
+    "area": "Input validation",
+    "scenario": "Empty input (0 rows)",
+    "expected": "Clear 'no rows' error",
+    "actual": "ValueError: The feature names should match those that were passed during fit.",
+    "result": "FAIL"
+  },
+  {
+    "id": "W6-11",
+    "area": "Reproducibility",
+    "scenario": "Train twice with the same seed",
+    "expected": "Identical predictions",
+    "actual": "identical probabilities across two training runs",
+    "result": "PASS"
+  },
+  {
+    "id": "W6-12",
+    "area": "Data processing",
+    "scenario": "Every model feature carries information (non-constant)",
+    "expected": "No constant features",
+    "actual": "constant features: ['HasInsurance']",
+    "result": "FAIL"
+  },
+  {
+    "id": "W6-13",
+    "area": "Data processing",
+    "scenario": "PreviousAppointmentsCount uses only information available at prediction time",
+    "expected": "Equals count of the patient's earlier appointments",
+    "actual": "11.1% of rows count visits that happen AFTER the scored appointment (feature = total visits - 1, not prior visits)",
+    "result": "FAIL"
+  },
+  {
+    "id": "W6-14",
+    "area": "Observability",
+    "scenario": "Inference produces an execution log",
+    "expected": "Logged run info and errors",
+    "actual": "no logging: print() only, no record of inputs rejected or predictions served",
+    "result": "FAIL"
+  }
+]

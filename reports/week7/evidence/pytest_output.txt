@@ -1,0 +1,72 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.9, pytest-9.2.0, pluggy-1.7.0 -- /home/oramsey/Documents/AnalystLab_Week6/.venv/bin/python3
+rootdir: /home/oramsey/Documents/AnalystLab_Week6
+configfile: pytest.ini
+testpaths: tests
+plugins: platformdirs-4.13.5
+collecting ... collected 61 items
+
+tests/test_cli.py::test_cli_scores_csv PASSED
+tests/test_cli.py::test_cli_rejects_invalid_input_with_exit_code_2 PASSED
+tests/test_cli.py::test_cli_skip_invalid_writes_rejects_file PASSED
+tests/test_cli.py::test_cli_reports_csv_line_numbers PASSED
+tests/test_cli.py::test_cli_output_uses_normalised_values PASSED
+tests/test_cli.py::test_cli_missing_file PASSED
+tests/test_cli.py::test_cli_threshold_override PASSED
+tests/test_cli.py::test_cli_writes_log_file PASSED
+tests/test_data_processing.py::test_feature_file_has_required_columns PASSED
+tests/test_data_processing.py::test_appointment_ids_unique PASSED
+tests/test_data_processing.py::test_no_missing_values_in_model_inputs PASSED
+tests/test_data_processing.py::test_categories_match_contract PASSED
+tests/test_data_processing.py::test_numeric_values_within_valid_limits PASSED
+tests/test_data_processing.py::test_target_matches_documented_rule PASSED
+tests/test_data_processing.py::test_model_features_are_not_constant PASSED
+tests/test_data_processing.py::test_prior_appointments_counts_only_earlier_visits PASSED
+tests/test_data_processing.py::test_prior_appointments_same_day_ordered_by_id PASSED
+tests/test_data_processing.py::test_point_in_time_feature_never_exceeds_week6_feature PASSED
+tests/test_data_processing.py::test_feature_preparation_does_not_mutate_input PASSED
+tests/test_model_integration.py::test_single_patient_scored PASSED
+tests/test_model_integration.py::test_single_category_batch_scored PASSED
+tests/test_model_integration.py::test_row_scores_independent_of_batch PASSED
+tests/test_model_integration.py::test_output_contract PASSED
+tests/test_model_integration.py::test_invalid_input_never_reaches_model PASSED
+tests/test_model_integration.py::test_skip_mode_scores_only_valid_rows PASSED
+tests/test_model_integration.py::test_extrapolation_logged PASSED
+tests/test_model_integration.py::test_scoring_logged PASSED
+tests/test_model_integration.py::test_preprocessing_output_shape PASSED
+tests/test_model_integration.py::test_heldout_performance_beats_baseline PASSED
+tests/test_model_integration.py::test_metadata_matches_artifact PASSED
+tests/test_model_integration.py::test_training_is_deterministic PASSED
+tests/test_model_integration.py::test_saved_artifact_reproduces_fresh_training PASSED
+tests/test_model_integration.py::test_save_load_roundtrip PASSED
+tests/test_model_integration.py::test_missing_artifact_gives_clear_error PASSED
+tests/test_model_integration.py::test_feature_mismatch_refuses_to_load PASSED
+tests/test_validation.py::test_valid_rows_pass_unchanged PASSED
+tests/test_validation.py::test_single_dict_accepted PASSED
+tests/test_validation.py::test_extra_columns_ignored PASSED
+tests/test_validation.py::test_column_order_irrelevant PASSED
+tests/test_validation.py::test_category_case_and_whitespace_normalised PASSED
+tests/test_validation.py::test_numeric_strings_coerced PASSED
+tests/test_validation.py::test_non_tabular_input_rejected[bad_input0] PASSED
+tests/test_validation.py::test_non_tabular_input_rejected[a string] PASSED
+tests/test_validation.py::test_non_tabular_input_rejected[42] PASSED
+tests/test_validation.py::test_empty_input_rejected PASSED
+tests/test_validation.py::test_missing_column_named PASSED
+tests/test_validation.py::test_missing_column_is_fatal_even_when_skipping PASSED
+tests/test_validation.py::test_invalid_value_rejected_with_reason[VisitType-Telehealth-unknown category] PASSED
+tests/test_validation.py::test_invalid_value_rejected_with_reason[Gender-Other-unknown category] PASSED
+tests/test_validation.py::test_invalid_value_rejected_with_reason[Age--5-outside valid range] PASSED
+tests/test_validation.py::test_invalid_value_rejected_with_reason[Age-250-outside valid range] PASSED
+tests/test_validation.py::test_invalid_value_rejected_with_reason[Age-45.5-not a whole number] PASSED
+tests/test_validation.py::test_invalid_value_rejected_with_reason[Age-forty-not a number] PASSED
+tests/test_validation.py::test_invalid_value_rejected_with_reason[Age-nan-missing value] PASSED
+tests/test_validation.py::test_invalid_value_rejected_with_reason[Gender-None-missing value] PASSED
+tests/test_validation.py::test_invalid_value_rejected_with_reason[DoctorYearsExperience-99-outside valid range] PASSED
+tests/test_validation.py::test_invalid_value_rejected_with_reason[PriorAppointmentsCount--1-outside valid range] PASSED
+tests/test_validation.py::test_all_problems_reported_at_once PASSED
+tests/test_validation.py::test_skip_mode_keeps_valid_rows PASSED
+tests/test_validation.py::test_skip_mode_with_no_valid_rows_raises PASSED
+tests/test_validation.py::test_unknown_errors_mode_rejected PASSED
+
+- generated xml file: /home/oramsey/Documents/AnalystLab_Week6/reports/week7/evidence/pytest_results.xml -
+============================= 61 passed in 42.25s ==============================

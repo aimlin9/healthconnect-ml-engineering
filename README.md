@@ -1,7 +1,11 @@
 # HealthConnect Rwanda — AI-Powered Clinical Risk Prediction & Healthcare Intelligence System
 
-**AnalystLab Africa Experience Lab Internship — Week 6, Batch E**
+**AnalystLab Africa Experience Lab Internship — Weeks 6–7, Batch E**
 **Track:** Machine Learning Engineering
+
+> **Week 7 (Testing → Refinement → Validation):** the Week 6 High-Risk Patient model is now a
+> tested, validated, reproducible pipeline. Week 6 inference passed 2/14 reliability probes; the
+> refined pipeline passes 14/14, with 61 automated tests. See [Week 7](#week-7--ml-pipeline-testing--reliability).
 
 ## Project
 
@@ -34,8 +38,12 @@ AnalystLab_Week6/
 │   └── feature_engineered/        # ML-ready feature set
 ├── notebooks/                     # end-to-end ML notebook(s)
 ├── models/                        # trained model artifacts, comparison table, metrics
+│   └── high_risk_pipeline.joblib  # [Week 7] saved pipeline (+ _meta.json)
 ├── reports/                       # Data Quality Report, Model Evaluation, Explainable AI, Executive Summary
-│   └── figures/                   # exported chart images used in reports/slides
+│   ├── figures/                   # exported chart images used in reports/slides
+│   └── week7/                     # [Week 7] testing report, summary, issue/decision logs, evidence/
+├── src/hc_pipeline/               # [Week 7] pipeline package: config, validation, features, pipeline
+├── tests/                         # [Week 7] pytest suite (61 tests)
 ├── presentation/                  # executive presentation slides
 ├── docs/                          # deployment architecture, responsible AI, assignment brief
 ├── references/                    # data dictionary / source notes
@@ -98,6 +106,52 @@ downstream (only 5,000 of 60,000 appointments carry full patient/doctor/facility
 | Responsible / Ethical AI | `docs/responsible_ai.md` |
 | Data Quality Report | `reports/data_quality_report.md` |
 
+## Week 7 — ML Pipeline Testing & Reliability
+
+Week 7 tested the Week 6 recommended model as a pipeline, fixed what failed, and retested.
+
+| | Week 6 | Week 7 |
+|---|---|---|
+| Reliability probes passed | 2 / 14 | 14 / 14 |
+| Score a single patient | Crashed (batch-dependent `get_dummies`) | Works; score identical alone or in a batch |
+| Impossible / missing input (Age 250, NaN) | Silently scored | Rejected with row and reason |
+| Saved, loadable model | None | `models/high_risk_pipeline.joblib` + metadata |
+| Feature using future visits | 11.1% of rows | 0% (point-in-time count) |
+| Logging | `print()` | Loads, rejects, extrapolation warnings, scores, latency |
+| Automated tests | None | 61, mutation-checked (5/5 injected bugs caught) |
+| ROC-AUC (same test split) | 0.727 | 0.721 |
+| Recall | 0.555 @ 0.50 | 0.785 @ 0.33 — but precision 0.49; threshold choice open with Data Science |
+
+**Run it**
+
+```bash
+source .venv/bin/activate
+python scripts/03_train_pipeline.py                          # train, evaluate, save the pipeline
+pytest                                                       # 61 tests
+python scripts/predict.py IN.csv OUT.csv --skip-invalid --log-file run.log
+python scripts/week7_audit_week6_pipeline.py                 # before: probes vs. Week 6 code
+python scripts/week7_retest_probes.py                        # after: same probes vs. refined pipeline
+python scripts/week7_mutation_check.py                       # does the suite catch injected bugs?
+```
+
+Input columns: `Gender`, `VisitType`, `Age`, `DoctorYearsExperience`, `PriorAppointmentsCount`,
+`DepartmentWorkload` (contract in `src/hc_pipeline/config.py`). Output adds `risk_probability`,
+`high_risk_flag`, `threshold`, `model_version`.
+
+| Week 7 Deliverable | Location |
+|---|---|
+| Testing & Reliability Package (main report) | `reports/week7/ML_Pipeline_Testing_Reliability_Report.md` |
+| Week 7 Project Summary | `reports/week7/Week7_Project_Summary.md` |
+| Integrated pipeline | `src/hc_pipeline/`, `scripts/03_train_pipeline.py`, `scripts/predict.py` |
+| Test plan, cases and results | Report §2–§5, `tests/`, `reports/week7/evidence/pytest_output.txt` |
+| Before / after evidence | `reports/week7/evidence/week6_audit_results.json`, `week7_retest_results.json` |
+| Model re-evaluation | `reports/week7/evidence/model_refinement_results.json`, `threshold_operating_points.json` |
+| End-to-end demo | `reports/week7/evidence/cli_demo/` |
+| Issue log / decision log | `reports/week7/issue_log.csv`, `reports/week7/decision_log.md` |
+| Configuration / dependencies | `src/hc_pipeline/config.py`, `requirements.txt`, report §7–§8 |
+
 ## Status
 
 Week 6 submission — complete.
+Week 7 — pipeline tested, refined and retested; cross-track test with Data Science and the
+threshold decision are open (report §10, ISS-09).

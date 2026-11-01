@@ -1,0 +1,7 @@
+AppointmentID,Gender,VisitType,Age,DoctorYearsExperience,PriorAppointmentsCount,DepartmentWorkload,risk_probability,high_risk_flag,threshold,model_version
+APT003407,Male,Consultation,61,12,0,32,0.2873,0,0.33,1.1.0-week7
+APT000758,Female,Emergency,0,13,1,30,0.4465,1,0.33,1.1.0-week7
+APT004545,Female,Consultation,19,22,1,27,0.4019,1,0.33,1.1.0-week7
+APT003236,Female,Consultation,27,15,0,31,0.3322,1,0.33,1.1.0-week7
+APT002917,Female,Emergency,49,6,0,32,0.329,0,0.33,1.1.0-week7
+APT003336,Male,Consultation,82,22,0,27,0.8668,1,0.33,1.1.0-week7

@@ -9,4 +9,5 @@ data/processed/*
 !data/processed/.gitkeep
 *.pkl
 *.joblib
+!models/high_risk_pipeline.joblib
 .DS_Store

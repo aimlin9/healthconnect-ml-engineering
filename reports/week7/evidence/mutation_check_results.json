@@ -1,0 +1,59 @@
+[
+  {
+    "id": "M1",
+    "mutation": "Range check removed (impossible ages accepted)",
+    "caught": true,
+    "summary": "8 failed, 45 passed in 11.11s",
+    "failing_tests": [
+      "tests/test_model_integration.py::test_skip_mode_scores_only_valid_rows",
+      "tests/test_validation.py::test_all_problems_reported_at_once",
+      "tests/test_validation.py::test_invalid_value_rejected_with_reason[Age--5-outside",
+      "tests/test_validation.py::test_invalid_value_rejected_with_reason[Age-250-outside",
+      "tests/test_validation.py::test_invalid_value_rejected_with_reason[DoctorYearsExperience-99-outside",
+      "tests/test_validation.py::test_invalid_value_rejected_with_reason[PriorAppointmentsCount--1-outside",
+      "tests/test_validation.py::test_skip_mode_keeps_valid_rows",
+      "tests/test_validation.py::test_skip_mode_with_no_valid_rows_raises"
+    ]
+  },
+  {
+    "id": "M2",
+    "mutation": "Unknown categories passed through to the model",
+    "caught": true,
+    "summary": "4 failed, 49 passed in 11.86s",
+    "failing_tests": [
+      "tests/test_model_integration.py::test_invalid_input_never_reaches_model",
+      "tests/test_validation.py::test_all_problems_reported_at_once",
+      "tests/test_validation.py::test_invalid_value_rejected_with_reason[Gender-Other-unknown",
+      "tests/test_validation.py::test_invalid_value_rejected_with_reason[VisitType-Telehealth-unknown"
+    ]
+  },
+  {
+    "id": "M3",
+    "mutation": "Point-in-time feature ignores visit date (Week 6-style leakage)",
+    "caught": true,
+    "summary": "2 failed, 51 passed in 9.39s",
+    "failing_tests": [
+      "tests/test_data_processing.py::test_prior_appointments_counts_only_earlier_visits",
+      "tests/test_model_integration.py::test_saved_artifact_reproduces_fresh_training"
+    ]
+  },
+  {
+    "id": "M4",
+    "mutation": "Model seed removed (non-reproducible training)",
+    "caught": true,
+    "summary": "2 failed, 51 passed in 9.42s",
+    "failing_tests": [
+      "tests/test_model_integration.py::test_saved_artifact_reproduces_fresh_training",
+      "tests/test_model_integration.py::test_training_is_deterministic"
+    ]
+  },
+  {
+    "id": "M5",
+    "mutation": "Decision flag ignores the stored threshold",
+    "caught": true,
+    "summary": "1 failed, 52 passed in 9.39s",
+    "failing_tests": [
+      "tests/test_model_integration.py::test_output_contract"
+    ]
+  }
+]

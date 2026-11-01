@@ -1,0 +1,299 @@
+{
+  "test_split": {
+    "week6_model": {
+      "accuracy": 0.746,
+      "precision": 0.782,
+      "recall": 0.555,
+      "f1": 0.649,
+      "roc_auc": 0.727,
+      "baseline_accuracy": 0.576,
+      "threshold": 0.5
+    },
+    "refined_threshold_0.5": {
+      "accuracy": 0.745,
+      "precision": 0.781,
+      "recall": 0.553,
+      "f1": 0.648,
+      "roc_auc": 0.721,
+      "baseline_accuracy": 0.576,
+      "threshold": 0.5
+    },
+    "refined_tuned_threshold": {
+      "accuracy": 0.566,
+      "precision": 0.492,
+      "recall": 0.785,
+      "f1": 0.605,
+      "roc_auc": 0.721,
+      "baseline_accuracy": 0.576,
+      "threshold": 0.33
+    }
+  },
+  "leave_one_facility_out": {
+    "per_facility": [
+      {
+        "FacilityID": "HF001",
+        "n": 273,
+        "week6_precision": 0.859,
+        "week6_recall": 0.579,
+        "week6_roc_auc": 0.756,
+        "refined_precision": 0.529,
+        "refined_recall": 0.786,
+        "refined_roc_auc": 0.728,
+        "refined_threshold": 0.33
+      },
+      {
+        "FacilityID": "HF002",
+        "n": 241,
+        "week6_precision": 0.797,
+        "week6_recall": 0.583,
+        "week6_roc_auc": 0.734,
+        "refined_precision": 0.485,
+        "refined_recall": 0.88,
+        "refined_roc_auc": 0.734,
+        "refined_threshold": 0.32
+      },
+      {
+        "FacilityID": "HF003",
+        "n": 256,
+        "week6_precision": 0.829,
+        "week6_recall": 0.607,
+        "week6_roc_auc": 0.789,
+        "refined_precision": 0.474,
+        "refined_recall": 0.821,
+        "refined_roc_auc": 0.745,
+        "refined_threshold": 0.33
+      },
+      {
+        "FacilityID": "HF004",
+        "n": 222,
+        "week6_precision": 0.809,
+        "week6_recall": 0.509,
+        "week6_roc_auc": 0.745,
+        "refined_precision": 0.53,
+        "refined_recall": 0.907,
+        "refined_roc_auc": 0.699,
+        "refined_threshold": 0.32
+      },
+      {
+        "FacilityID": "HF005",
+        "n": 223,
+        "week6_precision": 0.833,
+        "week6_recall": 0.542,
+        "week6_roc_auc": 0.758,
+        "refined_precision": 0.464,
+        "refined_recall": 0.783,
+        "refined_roc_auc": 0.754,
+        "refined_threshold": 0.33
+      },
+      {
+        "FacilityID": "HF006",
+        "n": 269,
+        "week6_precision": 0.872,
+        "week6_recall": 0.567,
+        "week6_roc_auc": 0.79,
+        "refined_precision": 0.527,
+        "refined_recall": 0.817,
+        "refined_roc_auc": 0.781,
+        "refined_threshold": 0.33
+      },
+      {
+        "FacilityID": "HF007",
+        "n": 224,
+        "week6_precision": 0.82,
+        "week6_recall": 0.485,
+        "week6_roc_auc": 0.707,
+        "refined_precision": 0.473,
+        "refined_recall": 0.854,
+        "refined_roc_auc": 0.675,
+        "refined_threshold": 0.32
+      },
+      {
+        "FacilityID": "HF008",
+        "n": 257,
+        "week6_precision": 0.784,
+        "week6_recall": 0.563,
+        "week6_roc_auc": 0.715,
+        "refined_precision": 0.448,
+        "refined_recall": 0.796,
+        "refined_roc_auc": 0.71,
+        "refined_threshold": 0.33
+      },
+      {
+        "FacilityID": "HF009",
+        "n": 241,
+        "week6_precision": 0.778,
+        "week6_recall": 0.602,
+        "week6_roc_auc": 0.785,
+        "refined_precision": 0.532,
+        "refined_recall": 0.806,
+        "refined_roc_auc": 0.767,
+        "refined_threshold": 0.34
+      },
+      {
+        "FacilityID": "HF010",
+        "n": 275,
+        "week6_precision": 0.779,
+        "week6_recall": 0.477,
+        "week6_roc_auc": 0.697,
+        "refined_precision": 0.437,
+        "refined_recall": 0.847,
+        "refined_roc_auc": 0.705,
+        "refined_threshold": 0.32
+      },
+      {
+        "FacilityID": "HF011",
+        "n": 273,
+        "week6_precision": 0.798,
+        "week6_recall": 0.645,
+        "week6_roc_auc": 0.773,
+        "refined_precision": 0.473,
+        "refined_recall": 0.873,
+        "refined_roc_auc": 0.778,
+        "refined_threshold": 0.33
+      },
+      {
+        "FacilityID": "HF012",
+        "n": 249,
+        "week6_precision": 0.828,
+        "week6_recall": 0.53,
+        "week6_roc_auc": 0.733,
+        "refined_precision": 0.453,
+        "refined_recall": 0.73,
+        "refined_roc_auc": 0.72,
+        "refined_threshold": 0.33
+      },
+      {
+        "FacilityID": "HF013",
+        "n": 278,
+        "week6_precision": 0.802,
+        "week6_recall": 0.608,
+        "week6_roc_auc": 0.768,
+        "refined_precision": 0.492,
+        "refined_recall": 0.817,
+        "refined_roc_auc": 0.747,
+        "refined_threshold": 0.33
+      },
+      {
+        "FacilityID": "HF014",
+        "n": 276,
+        "week6_precision": 0.847,
+        "week6_recall": 0.581,
+        "week6_roc_auc": 0.77,
+        "refined_precision": 0.415,
+        "refined_recall": 0.952,
+        "refined_roc_auc": 0.767,
+        "refined_threshold": 0.32
+      },
+      {
+        "FacilityID": "HF015",
+        "n": 245,
+        "week6_precision": 0.757,
+        "week6_recall": 0.589,
+        "week6_roc_auc": 0.697,
+        "refined_precision": 0.392,
+        "refined_recall": 0.811,
+        "refined_roc_auc": 0.713,
+        "refined_threshold": 0.33
+      },
+      {
+        "FacilityID": "HF016",
+        "n": 261,
+        "week6_precision": 0.884,
+        "week6_recall": 0.54,
+        "week6_roc_auc": 0.746,
+        "refined_precision": 0.477,
+        "refined_recall": 0.832,
+        "refined_roc_auc": 0.721,
+        "refined_threshold": 0.32
+      },
+      {
+        "FacilityID": "HF017",
+        "n": 243,
+        "week6_precision": 0.871,
+        "week6_recall": 0.632,
+        "week6_roc_auc": 0.76,
+        "refined_precision": 0.534,
+        "refined_recall": 0.812,
+        "refined_roc_auc": 0.758,
+        "refined_threshold": 0.33
+      },
+      {
+        "FacilityID": "HF018",
+        "n": 240,
+        "week6_precision": 0.792,
+        "week6_recall": 0.581,
+        "week6_roc_auc": 0.749,
+        "refined_precision": 0.497,
+        "refined_recall": 0.924,
+        "refined_roc_auc": 0.75,
+        "refined_threshold": 0.32
+      },
+      {
+        "FacilityID": "HF019",
+        "n": 217,
+        "week6_precision": 0.803,
+        "week6_recall": 0.589,
+        "week6_roc_auc": 0.734,
+        "refined_precision": 0.42,
+        "refined_recall": 0.811,
+        "refined_roc_auc": 0.685,
+        "refined_threshold": 0.32
+      },
+      {
+        "FacilityID": "HF020",
+        "n": 237,
+        "week6_precision": 0.744,
+        "week6_recall": 0.592,
+        "week6_roc_auc": 0.757,
+        "refined_precision": 0.566,
+        "refined_recall": 0.748,
+        "refined_roc_auc": 0.719,
+        "refined_threshold": 0.34
+      }
+    ],
+    "summary": {
+      "week6_precision": {
+        "min": 0.744,
+        "median": 0.806,
+        "max": 0.884
+      },
+      "week6_recall": {
+        "min": 0.477,
+        "median": 0.581,
+        "max": 0.645
+      },
+      "week6_roc_auc": {
+        "min": 0.697,
+        "median": 0.752,
+        "max": 0.79
+      },
+      "refined_precision": {
+        "min": 0.392,
+        "median": 0.476,
+        "max": 0.566
+      },
+      "refined_recall": {
+        "min": 0.73,
+        "median": 0.817,
+        "max": 0.952
+      },
+      "refined_roc_auc": {
+        "min": 0.675,
+        "median": 0.731,
+        "max": 0.781
+      },
+      "refined_threshold": {
+        "min": 0.32,
+        "median": 0.33,
+        "max": 0.34
+      }
+    }
+  },
+  "artifact": {
+    "model_version": "1.1.0-week7",
+    "threshold": 0.33,
+    "sklearn_version": "1.9.1",
+    "train_data_fingerprint": "64e9964b632a1cff",
+    "n_train": 3750
+  }
+}

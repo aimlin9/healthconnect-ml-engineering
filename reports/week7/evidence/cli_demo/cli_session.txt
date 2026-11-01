@@ -1,0 +1,16 @@
+$ python scripts/predict.py sample_input.csv scored.csv
+2026-11-01 16:12:45,222 INFO hc_pipeline: loaded model 1.1.0-week7 (threshold 0.33)
+2026-11-01 16:12:45,225 INFO hc_pipeline: read 8 row(s) from sample_input.csv
+2026-11-01 16:12:45,239 ERROR hc_pipeline: CSV line 7, VisitType: unknown category 'Telehealth'; allowed ['Consultation', 'Emergency', 'Follow-up']
+2026-11-01 16:12:45,239 ERROR hc_pipeline: CSV line 4, Age: 250 outside valid range [0, 120]
+2026-11-01 16:12:45,239 ERROR hc_pipeline: no output written (2 problem(s)); fix the input or use --skip-invalid
+[exit code 2]
+
+$ python scripts/predict.py sample_input.csv scored.csv --skip-invalid --log-file run.log
+2026-11-01 16:12:48,001 INFO hc_pipeline: loaded model 1.1.0-week7 (threshold 0.33)
+2026-11-01 16:12:48,004 INFO hc_pipeline: read 8 row(s) from sample_input.csv
+2026-11-01 16:12:48,019 WARNING hc_pipeline: rejected 2 of 8 row(s) failing validation
+2026-11-01 16:12:48,089 INFO hc_pipeline: scored 6 row(s), flagged 4 high-risk, rejected 2, 84.0 ms
+2026-11-01 16:12:48,109 INFO hc_pipeline: wrote 6 scored row(s) to scored.csv
+2026-11-01 16:12:48,114 WARNING hc_pipeline: wrote 2 problem(s) to scored.rejected.csv
+[exit code 0]

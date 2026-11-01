@@ -1,0 +1,142 @@
+[
+  {
+    "id": "W6-01",
+    "area": "Persistence",
+    "scenario": "A trained model artifact exists that a service could load",
+    "expected": "Serialized model + metadata in models/",
+    "week6_result": "FAIL",
+    "week6_actual": "model files found: none \u2014 model exists only in notebook memory",
+    "week7_result": "PASS",
+    "week7_actual": "loaded models/high_risk_pipeline.joblib v1.1.0-week7"
+  },
+  {
+    "id": "W6-02",
+    "area": "Model integration",
+    "scenario": "Score a large batch containing every category",
+    "expected": "One probability per row",
+    "week6_result": "PASS",
+    "week6_actual": "1250 probabilities for 1250 mixed-category rows",
+    "week7_result": "PASS",
+    "week7_actual": "1250 probabilities"
+  },
+  {
+    "id": "W6-03",
+    "area": "Preprocessing",
+    "scenario": "Score a single patient (the real-time use case)",
+    "expected": "One probability",
+    "week6_result": "FAIL",
+    "week6_actual": "ValueError: The feature names should match those that were passed during fit.",
+    "week7_result": "PASS",
+    "week7_actual": "1 probabilities"
+  },
+  {
+    "id": "W6-04",
+    "area": "Preprocessing",
+    "scenario": "Score a batch where every patient is an Emergency visit",
+    "expected": "One probability per row",
+    "week6_result": "FAIL",
+    "week6_actual": "ValueError: The feature names should match those that were passed during fit.",
+    "week7_result": "PASS",
+    "week7_actual": "20 probabilities"
+  },
+  {
+    "id": "W6-05",
+    "area": "Input validation",
+    "scenario": "Unseen category (VisitType='Telehealth')",
+    "expected": "Clear rejection naming the bad value",
+    "week6_result": "FAIL",
+    "week6_actual": "ValueError: The feature names should match those that were passed during fit.",
+    "week7_result": "PASS",
+    "week7_actual": "rejected: 5 input problem(s): row 2903, VisitType: unknown category 'Telehealth'; allowed ['Consultation', 'Emergency', 'Follow-up']; row 3137, VisitType: unknown categor"
+  },
+  {
+    "id": "W6-06",
+    "area": "Input validation",
+    "scenario": "Required column missing (DepartmentWorkload)",
+    "expected": "Clear error naming the missing column",
+    "week6_result": "FAIL",
+    "week6_actual": "KeyError: \"['DepartmentWorkload'] not in index\"",
+    "week7_result": "PASS",
+    "week7_actual": "rejected: 1 input problem(s): row all, DepartmentWorkload: required column missing"
+  },
+  {
+    "id": "W6-07",
+    "area": "Input validation",
+    "scenario": "Age supplied as text (e.g. '45' from a CSV/form)",
+    "expected": "Coerced to number, or clear type error",
+    "week6_result": "FAIL",
+    "week6_actual": "ValueError: The feature names should match those that were passed during fit.",
+    "week7_result": "PASS",
+    "week7_actual": "5 probabilities"
+  },
+  {
+    "id": "W6-08",
+    "area": "Input validation",
+    "scenario": "Impossible values (Age = -5 and 250)",
+    "expected": "Rejected with the offending rows",
+    "week6_result": "FAIL",
+    "week6_actual": "silently scored impossible ages: [0.348, 0.764]",
+    "week7_result": "PASS",
+    "week7_actual": "rejected: 2 input problem(s): row 2903, Age: -5 outside valid range [0, 120]; row 3137, Age: 250 outside valid range [0, 120]"
+  },
+  {
+    "id": "W6-09",
+    "area": "Input validation",
+    "scenario": "Missing value (Age = NaN)",
+    "expected": "Rejected with the offending rows",
+    "week6_result": "FAIL",
+    "week6_actual": "silently scored missing Age: [0.325, 0.279]",
+    "week7_result": "PASS",
+    "week7_actual": "rejected: 2 input problem(s): row 2903, Age: missing value; row 3137, Age: missing value"
+  },
+  {
+    "id": "W6-10",
+    "area": "Input validation",
+    "scenario": "Empty input (0 rows)",
+    "expected": "Clear 'no rows' error",
+    "week6_result": "FAIL",
+    "week6_actual": "ValueError: The feature names should match those that were passed during fit.",
+    "week7_result": "PASS",
+    "week7_actual": "rejected: 1 input problem(s): row -, -: input has no rows"
+  },
+  {
+    "id": "W6-11",
+    "area": "Reproducibility",
+    "scenario": "Train twice with the same seed",
+    "expected": "Identical predictions",
+    "week6_result": "PASS",
+    "week6_actual": "identical probabilities across two training runs",
+    "week7_result": "PASS",
+    "week7_actual": "identical probabilities across two training runs"
+  },
+  {
+    "id": "W6-12",
+    "area": "Data processing",
+    "scenario": "Every model feature carries information (non-constant)",
+    "expected": "No constant features",
+    "week6_result": "FAIL",
+    "week6_actual": "constant features: ['HasInsurance']",
+    "week7_result": "PASS",
+    "week7_actual": "constant features: none (HasInsurance removed)"
+  },
+  {
+    "id": "W6-13",
+    "area": "Data processing",
+    "scenario": "PreviousAppointmentsCount uses only information available at prediction time",
+    "expected": "Equals count of the patient's earlier appointments",
+    "week6_result": "FAIL",
+    "week6_actual": "11.1% of rows count visits that happen AFTER the scored appointment (feature = total visits - 1, not prior visits)",
+    "week7_result": "PASS",
+    "week7_actual": "0.0% of rows use future visits (PriorAppointmentsCount is point-in-time)"
+  },
+  {
+    "id": "W6-14",
+    "area": "Observability",
+    "scenario": "Inference produces an execution log",
+    "expected": "Logged run info and errors",
+    "week6_result": "FAIL",
+    "week6_actual": "no logging: print() only, no record of inputs rejected or predictions served",
+    "week7_result": "PASS",
+    "week7_actual": "logs model load, rejected rows, extrapolation warnings, rows scored/flagged, latency"
+  }
+]

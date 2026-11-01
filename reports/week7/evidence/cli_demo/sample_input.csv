@@ -1,0 +1,9 @@
+AppointmentID,Gender,VisitType,Age,DoctorYearsExperience,PriorAppointmentsCount,DepartmentWorkload
+APT003407,Male,Consultation,61,12,0,32
+APT000758,Female,Emergency,0,13,1,30
+APT003625,Male,Emergency,250,2,0,16
+APT004545,Female,Consultation,19,22,1,27
+APT003236,Female,Consultation,27,15,0,31
+APT001869,Female,Telehealth,62,16,0,26
+APT002917, female ,Emergency,49,6,0,32
+APT003336,Male,Consultation,82,22,0,27

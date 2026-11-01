@@ -1,0 +1,55 @@
+{
+  "model_version": "1.1.0-week7",
+  "trained_at": "2026-11-01T16:02:19+00:00",
+  "sklearn_version": "1.9.1",
+  "features": [
+    "Gender",
+    "VisitType",
+    "Age",
+    "DoctorYearsExperience",
+    "PriorAppointmentsCount",
+    "DepartmentWorkload"
+  ],
+  "categories": {
+    "Gender": [
+      "Female",
+      "Male"
+    ],
+    "VisitType": [
+      "Consultation",
+      "Emergency",
+      "Follow-up"
+    ]
+  },
+  "training_range": {
+    "Age": [
+      0,
+      90
+    ],
+    "DoctorYearsExperience": [
+      1,
+      25
+    ],
+    "PriorAppointmentsCount": [
+      0,
+      3
+    ],
+    "DepartmentWorkload": [
+      13,
+      38
+    ]
+  },
+  "threshold": 0.33,
+  "target": "HighRiskPatient",
+  "n_train": 3750,
+  "train_data_fingerprint": "64e9964b632a1cff",
+  "test_metrics": {
+    "accuracy": 0.566,
+    "precision": 0.492,
+    "recall": 0.785,
+    "f1": 0.605,
+    "roc_auc": 0.721,
+    "baseline_accuracy": 0.576,
+    "threshold": 0.33
+  }
+}
