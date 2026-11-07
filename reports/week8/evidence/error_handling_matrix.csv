@@ -1,0 +1,12 @@
+case,expected_exit,exit_code,output_written,rows_scored,first_message,pass
+valid single patient,0,0,True,1,,True
+impossible age (250),2,2,False,0,"CSV line 2, Age: 250 outside valid range [0, 120]",True
+missing value (Age blank),2,2,False,0,"CSV line 2, Age: missing value",True
+unknown category (VisitType=Surgery),2,2,False,0,"CSV line 2, VisitType: unknown category 'Surgery'; allowed ['Consultation', 'Emergency', 'Follow-up']",True
+missing required column,2,2,False,0,"CSV line all, DepartmentWorkload: required column missing",True
+non-numeric age ('fifty'),2,2,False,0,"CSV line 2, Age: not a number: 'fifty'",True
+"mixed batch, --skip-invalid",0,0,True,2,rejected 1 of 3 row(s) failing validation,True
+outside training range (Age 110) -> scored with warning,0,0,True,1,"1 row(s) have Age outside the training range [0, 90]; prediction is an extrapolation",True
+threshold override out of range,2,2,False,0,--threshold must be between 0 and 1,True
+input file does not exist,2,2,False,0,cannot read <tmp>\in_9.csv: [Errno 2] No such file or directory: '<tmp>\\in_9.csv',True
+model artifact missing (load()),3,3,False,0,model artifact not found (nope.joblib / nope.json); run scripts/03_train_pipeline.py first,True

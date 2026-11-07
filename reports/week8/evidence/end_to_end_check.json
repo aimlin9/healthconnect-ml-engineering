@@ -1,0 +1,30 @@
+{
+  "exit_code": 0,
+  "rows_in": 1250,
+  "rows_scored": 1250,
+  "cli_matches_in_process": true,
+  "passthrough_id_preserved": true,
+  "flag_rate": 0.676,
+  "metrics_from_cli_output": {
+    "accuracy": 0.566,
+    "precision": 0.492,
+    "recall": 0.785,
+    "f1": 0.605,
+    "roc_auc": 0.721,
+    "baseline_accuracy": 0.576,
+    "threshold": 0.33
+  },
+  "output_columns": [
+    "AppointmentID",
+    "Gender",
+    "VisitType",
+    "Age",
+    "DoctorYearsExperience",
+    "PriorAppointmentsCount",
+    "DepartmentWorkload",
+    "risk_probability",
+    "high_risk_flag",
+    "threshold",
+    "model_version"
+  ]
+}

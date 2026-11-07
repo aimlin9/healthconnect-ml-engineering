@@ -1,0 +1,39 @@
+{
+  "environment": {
+    "platform": "Windows-11-10.0.26300-SP0",
+    "python": "3.12.10",
+    "sklearn": "1.9.1",
+    "pandas": "3.1.0",
+    "numpy": "2.5.4"
+  },
+  "committed_artifact": {
+    "trained_with_sklearn": "1.9.1",
+    "fingerprint": "64e9964b632a1cff",
+    "threshold": 0.33,
+    "test_metrics": {
+      "accuracy": 0.566,
+      "precision": 0.492,
+      "recall": 0.785,
+      "f1": 0.605,
+      "roc_auc": 0.721,
+      "baseline_accuracy": 0.576,
+      "threshold": 0.33
+    }
+  },
+  "fresh_retrain": {
+    "fingerprint": "64e9964b632a1cff",
+    "threshold": 0.33,
+    "test_metrics": {
+      "accuracy": 0.566,
+      "precision": 0.492,
+      "recall": 0.785,
+      "f1": 0.605,
+      "roc_auc": 0.721,
+      "baseline_accuracy": 0.576,
+      "threshold": 0.33
+    }
+  },
+  "max_abs_probability_diff_all_rows": 0.0,
+  "flags_disagreeing_all_rows": 0,
+  "identical": true
+}

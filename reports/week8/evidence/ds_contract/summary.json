@@ -1,0 +1,57 @@
+{
+  "environment": {
+    "platform": "Windows-11-10.0.26300-SP0",
+    "python": "3.12.10",
+    "sklearn": "1.9.1",
+    "pandas": "3.1.0",
+    "numpy": "2.5.4"
+  },
+  "D_mle_data_into_ds_scorer": {
+    "rows_sent": 5000,
+    "status_counts": {
+      "SCORED": 5000
+    },
+    "flag_top20_rate": 0.2,
+    "risk_score_range": [
+      0.0679,
+      0.1278
+    ],
+    "column_mapping": {
+      "PriorAppointmentsCount": "PriorVisits",
+      "HasChronicCondition": "HasChronic"
+    }
+  },
+  "ds_package": {
+    "model": "HealthConnect admission-proxy scorer (refined)",
+    "version": "w7-1.0",
+    "trained_with": {
+      "python": "3.14.6",
+      "sklearn": "1.9.0"
+    },
+    "release_gate_passed": false
+  },
+  "A_ds_package_unchanged": {
+    "passed": 15,
+    "of": 15,
+    "failed": [],
+    "load_warnings": [
+      "Trying to unpickle estimator ColumnTransformer from version 1.9.0 when using version 1.9.1.",
+      "Trying to unpickle estimator LogisticRegression from version 1.9.0 when using version 1.9.1.",
+      "Trying to unpickle estimator OneHotEncoder from version 1.9.0 when using version 1.9.1.",
+      "Trying to unpickle estimator Pipeline from version 1.9.0 when using version 1.9.1.",
+      "Trying to unpickle estimator SimpleImputer from version 1.9.0 when using version 1.9.1.",
+      "Trying to unpickle estimator StandardScaler from version 1.9.0 when using version 1.9.1.",
+      "scikit-learn 1.9.1 != training version 1.9.0; results may differ"
+    ]
+  },
+  "B_mle_pipeline_vs_ds_contract": {
+    "passed": 11,
+    "of": 15,
+    "failed": [
+      "C3",
+      "C4",
+      "C5",
+      "C13"
+    ]
+  }
+}
