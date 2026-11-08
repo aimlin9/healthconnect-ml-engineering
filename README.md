@@ -191,6 +191,7 @@ python presentation/week8/make_video.py                              # slides + 
 | Integration and readiness evidence | `reports/week8/evidence/` |
 | Presentation slides | `presentation/week8/HealthConnect_Week8_MLE_Slides_Ramsey.pdf`, `presentation/week8/slides/` |
 | Video narration script | `presentation/week8/video_script.md` |
+| Individual presentation video (9:27, own narration) | `presentation/week8/HealthConnect_Week8_MLE_Presentation_Ramsey.mp4` |
 
 ## Status
 
