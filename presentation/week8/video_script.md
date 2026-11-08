@@ -4,6 +4,8 @@
 Rephrase in your own words wherever it feels stiff: the brief asks you to *personally explain*
 your work, so it should sound like you, not like reading.
 
+**Re-record (8 Nov, after the DS replies):** slides 5, 7, 8, 10 and 11 changed; 1–4, 6 and 9 keep the earlier takes.
+
 **Recording:** one audio file per slide, named `slide01.m4a` … `slide11.m4a` (mp3/wav also
 fine), in `presentation/week8/recordings/`. Then run
 `python presentation/week8/make_video.py` to build the MP4. A phone voice-memo app works.
@@ -53,15 +55,15 @@ proper exit codes. The threshold lives in the model's metadata, so it can be cha
 retraining.
 
 ### Slide 5: Evidence (≈45 s)
-These are the results. Fourteen of fourteen reliability checks, up from two. Sixty-one of
-sixty-one automated tests, and when I deliberately injected five bugs, the tests caught all
-five. Eleven of eleven error cases behave exactly as specified. And this week I re-cloned the
-project on Windows with Python 3.12, a different setup from Week 7, retrained, and got an
-identical model: same data fingerprint, same metrics, and zero patients whose flag changed.
-On the held-out test set, ROC-AUC went from 0.727 to 0.721 after I removed leaked features, so
-fixing the leakage cost almost nothing. At the 0.33 threshold, recall is 0.785, but 67.6
-percent of patients get flagged, which I come back to under limitations.
-
+These are the results. Fourteen of fourteen reliability checks, up from two. Sixty-five of
+sixty-five automated tests, and when I deliberately injected five bugs, the tests caught all
+five. Twelve of twelve error cases behave exactly as specified. And this week I re-cloned the
+project on Windows with Python 3.12, retrained, and got an identical model: same data
+fingerprint, same metrics, and zero patients whose flag changed.
+On the held-out test set, ROC-AUC went from 0.727 to 0.721 after I removed leaked features.
+Instead of a fixed threshold, the clinic now chooses how many patients to flag: at the top
+twenty percent, the model finds about 1.8 times more high-risk patients than random. It also
+passed the Data Science release gate, but as you'll see, there's a catch.
 ### Slide 6: Bad input is refused (≈35 s)
 This is what the error handling looks like. A valid patient is scored. An age of 250, a blank
 age, the word "fifty", or an unknown visit type is rejected, with the CSV line and the
@@ -76,20 +78,20 @@ handed me her final model package: an admission-proxy scorer, a requirements not
 interface contract tests. She was clear that the model is a validated null result. It has no
 predictive signal and must not be used for decisions, so what I was testing is the interface.
 Before running anything, I reviewed her code and checked the model file. Then I ran her tests
-in two environments, mine and one matching her training setup: fifteen of fifteen in both.
-I then ran her same tests against my own pipeline: eleven of fifteen. And I fed all five
-thousand rows from my data into her scorer. All were scored and none were rejected.
-
-### Slide 8: What the collaboration revealed (≈50 s)
-The four failures weren't bugs. They showed that our two scoring contracts disagree. Her
-scorer imputes missing values and scores unknown categories with a warning, while mine rejects
-them, and we handle empty input differently. We also have different limits, Age 110 versus
-120, and decimals versus whole numbers. I asked her to confirm her prior-visits feature only
-counts earlier visits, because that was exactly the leakage bug I fixed in Week 7. And since her
-model needs the diagnosis, it can only run after consultation, so I won't connect it to
-booking. I've sent her the results and a proposal for one shared contract, and the changes and
-retest will follow her reply.
-
+in two environments: fifteen of fifteen in both. Her same tests against my own pipeline
+first gave eleven of fifteen. After we agreed one shared contract and both changed our code,
+it's fifteen of fifteen. And all five thousand rows from my data were scored by her model,
+with none rejected.
+### Slide 8: From two contracts to one (≈60 s)
+The four failures weren't bugs. They showed our two scoring contracts disagreed: her scorer
+filled in missing values and scored unknown categories, while mine rejected them. We agreed
+one contract: bad rows are rejected with a reason, every row gets a status, and empty input
+gives empty output. We also agreed the same limits, age up to 120 and whole numbers, and she
+confirmed her prior-visits count only uses earlier visits.
+Then she applied her release gate to my High-Risk model. It passes, with an AUC of 0.721. But
+age sixty-five or over, on its own, scores exactly the same, because age is part of the rule
+that builds the label. The model is just restating its own target, so we've both labelled our
+models demo only. And instead of the 0.33 threshold, the clinic picks a flag budget.
 ### Slide 9: How my work connects (≈60 s)
 Here's how it fits together. Data Analytics provides the validated patterns and the valid
 input ranges. Data Science provides the model, the target and the operating rule. My pipeline
@@ -102,19 +104,19 @@ to miss appointments. My contribution means any model Data Science produces gets
 same way, with bad input refused and every run logged.
 
 ### Slide 10: Limitations (≈45 s)
-I want to be clear about the limits. There's no proven predictor yet: the Data Science model
-has no signal, with a hold-out AUC of 0.467, and my High-Risk label is a constructed rule, not
-a real outcome. The data is synthetic, and only five thousand of sixty thousand appointments
-have full context. The threshold isn't decided: 0.33 flags two-thirds of patients, which is
-too many to follow up. It's a command-line tool and Python API, not a production web service.
-And fairness by province or facility type can't be tested with this data. So it's ready to
-demonstrate, not to make decisions about real patients.
-
+I want to be clear about the limits. There's no usable predictor yet: the Data Science model
+has no signal, with a hold-out AUC of 0.467, and my High-Risk model only passes the gate by
+restating the age part of its constructed label. The data is synthetic, and only five thousand
+of sixty thousand appointments have full context. The clinic still has to choose its flag
+budget, ten, twenty or thirty percent, based on how many patients it can follow up. It's a
+command-line tool and Python API, not a production web service. And fairness by province or
+facility type can't be tested with this data. So it's ready to demonstrate, not to make
+decisions about real patients.
 ### Slide 11: Closing (≈40 s)
 My key takeaway: a model is only useful when other people can run it safely and get the same
 answer. Testing showed the Week 6 code wasn't usable, and now it is, with evidence. What I
-learned is to test the pipeline and not just the model, to report null results honestly, and
-that collaboration needs agreed contracts, not just shared files. In a future version, I'd
-retrain on real outcomes like attendance, agree one shared contract with Data Science, agree
-the threshold with the clinic, and add a web API, monitoring and fairness checks.
+learned is to test the pipeline and not just the model, that collaboration needs agreed
+contracts, not just shared files, and that a release gate has to be paired with a check of how
+the target is built. In a future version, I'd retrain on real outcomes like attendance, let the
+clinic set the flag budget, and add a web API, monitoring and fairness checks.
 Thank you for watching.

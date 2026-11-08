@@ -34,6 +34,8 @@ ds = json.loads((EV8 / "ds_contract/summary.json").read_text())
 w7 = json.loads((EV7 / "week7_retest_results.json").read_text())
 w6 = json.loads((EV7 / "week6_audit_results.json").read_text())
 meta = json.loads((ROOT / "models/high_risk_pipeline_meta.json").read_text())
+gate = json.loads((EV8 / "release_gate_high_risk.json").read_text())
+gm, rr = gate["metrics"], gate["rule_restatement_check"]["holdout_auc"]
 errors = (EV8 / "error_handling_matrix.csv").read_text().splitlines()
 n_err, n_err_pass = len(errors) - 1, sum(1 for l in errors[1:] if l.rstrip().endswith("True"))
 
@@ -115,7 +117,7 @@ slide("My track contribution", "What I built: the scoring pipeline", f"""
 <div class='flow'><div><b>Input</b><br>CSV, table or one patient</div><div class='arr'>→</div>
 <div><b>Validate</b><br>columns, categories, ranges, missing values</div><div class='arr'>→</div>
 <div><b>Saved pipeline</b><br>fixed encoding + Random Forest</div><div class='arr'>→</div>
-<div><b>Output + log</b><br>risk_probability, flag, threshold, version</div></div>
+<div><b>Output + log</b><br>risk_probability, flag, per-row status, version</div></div>
 <div class='two'><div><h2>Methods &amp; tools</h2><ul>
 <li>Python, pandas, scikit-learn Pipeline, joblib</li><li>pytest + mutation testing</li><li>Command-line tool with exit codes and logging</li></ul></div>
 <div><h2>Design decisions</h2><ul>
@@ -127,13 +129,13 @@ slide("My track contribution", "What I built: the scoring pipeline", f"""
 slide("Results", "Evidence that it is ready to demonstrate", f"""
 <div class='big'>
 <div><b>{w7_pass}/{w7_n}</b><span>reliability checks<br>(Week 6 code: {w6_pass}/{w6_n})</span></div>
-<div><b>61/61</b><span>automated tests pass<br>5/5 injected bugs caught</span></div>
+<div><b>65/65</b><span>automated tests pass<br>5/5 injected bugs caught</span></div>
 <div><b>{n_err_pass}/{n_err}</b><span>error cases handled<br>as specified</span></div>
 <div><b>{'Identical' if repro['identical'] else 'Differs'}</b><span>retrain on Windows +<br>Python {repro['environment']['python']}</span></div></div>
 <table><tr><th>High-Risk model, held-out test set (n = {e2e['rows_in']:,})</th><th>Value</th></tr>
 <tr><td>ROC-AUC (Week 6 → Week 7, after removing leaked features)</td><td>0.727 → {tm['roc_auc']}</td></tr>
-<tr><td>Recall / precision at threshold {meta['threshold']}</td><td>{tm['recall']} / {tm['precision']}</td></tr>
-<tr><td>Share of patients flagged</td><td>{e2e['flag_rate']:.1%}</td></tr></table>""")
+<tr><td>Lift when the clinic flags its top 10% / 20% / 30% (replaces the 0.33 threshold)</td><td>{gm['lift']['10%']['lift']:.2f} / {gm['lift']['20%']['lift']:.2f} / {gm['lift']['30%']['lift']:.2f}</td></tr>
+<tr><td>Data Science release gate (AUC, 95% CI, shuffle test, lift)</td><td>Passed, but Age ≥ 65 alone: {rr['rule_component_Age>=65_alone']}</td></tr></table>""")
 
 # 6 Error handling
 slide("Testing", "Bad input is refused, with a reason", """
@@ -142,7 +144,7 @@ slide("Testing", "Bad input is refused, with a reason", """
 <tr><td>Age 250</td><td>2</td><td>Rejected: “CSV line 2, Age: 250 outside valid range [0, 120]”</td></tr>
 <tr><td>Age blank / “fifty”</td><td>2</td><td>Rejected: missing value / not a number</td></tr>
 <tr><td>VisitType = Surgery</td><td>2</td><td>Rejected, lists the allowed categories</td></tr>
-<tr><td>Mixed batch with --skip-invalid</td><td>0</td><td>Good rows scored; bad rows written to a rejects file</td></tr>
+<tr><td>Mixed batch with --skip-invalid</td><td>0</td><td>Good rows scored; bad rows marked REJECTED with the reason, and written to a rejects file</td></tr>
 <tr><td>Age 110 (valid, outside training data)</td><td>0</td><td>Scored, with an extrapolation warning in the log</td></tr>
 <tr><td>Model file missing</td><td>3</td><td>Clear error: run the training script first</td></tr></table>""")
 
@@ -156,17 +158,17 @@ slide("Cross-track collaboration", "Data Science ↔ ML Engineering", f"""
 <li>Ran the same tests against my pipeline</li><li>Fed my data into their scorer</li></ul></div></div>
 <div class='big' style='margin-top:30px'>
 <div><b>{dsA['passed']}/{dsA['of']}</b><span>DS package in my environment<br>(Py 3.12 / sklearn 1.9.1 and 3.14 / 1.9.0)</span></div>
-<div><b>{dsB['passed']}/{dsB['of']}</b><span>DS tests against my pipeline<br>(fail: {', '.join(dsB['failed'])})</span></div>
+<div><b>11 → {dsB['passed']}/{dsB['of']}</b><span>DS tests against my pipeline<br>(7 Nov → shared contract, 8 Nov)</span></div>
 <div><b>{dsD['rows_sent']:,}</b><span>of my rows scored by the DS model,<br>0 rejected</span></div></div>""")
 
 # 8 What changed
-slide("Cross-track collaboration", "What the collaboration revealed", """
-<table><tr><th style='width:34%'>Finding</th><th>Action</th></tr>
-<tr><td>The two scoring contracts disagree on missing values, unknown categories and empty input (C3, C4, C5, C13)</td><td>Proposed one shared contract: adopt the DS per-row status column, keep rejecting missing values</td></tr>
-<tr><td>Different limits: Age 110 vs 120; decimals vs whole numbers</td><td>Agree one set of limits</td></tr>
-<tr><td>PriorVisits might count future visits (the bug I fixed in Week 7)</td><td>Asked DS to confirm the definition</td></tr>
-<tr><td>DS model needs Diagnosis, which is only known after consultation</td><td>Not connected to a booking-time trigger</td></tr></table>
-<p style='margin-top:26px'>Results and questions sent to Data Science on 7 Nov. <b>Changes and retest follow their reply.</b></p>""")
+slide("Cross-track collaboration", "From two contracts to one", f"""
+<table style='font-size:28px'><tr><th style='width:33%'>What the tests revealed</th><th>What we agreed and did</th></tr>
+<tr><td>Contracts disagreed on missing values, unknown categories and empty input</td><td>One shared contract: reject with a reason, per-row status, empty in → empty out. Both sides changed: <b>{dsB['passed']}/{dsB['of']}</b></td></tr>
+<tr><td>Age 110 vs 120; decimals vs whole numbers</td><td>Shared limits: Age 0–120, whole numbers</td></tr>
+<tr><td>PriorVisits might count future visits</td><td>Confirmed point-in-time, same as mine</td></tr>
+<tr><td>DS release gate applied to my High-Risk model</td><td>Passes (AUC {gm['roc_auc']}), but Age ≥ 65 alone scores {rr['rule_component_Age>=65_alone']}: it restates its own label → <b>demo only</b></td></tr>
+<tr><td>Threshold 0.33 flags two-thirds of patients</td><td>Flag budget: report lift at 10/20/30%; the clinic picks the percentage</td></tr></table>""")
 
 # 9 Overall solution
 slide("Overall HealthConnect solution", "How my work connects", """
@@ -182,9 +184,9 @@ slide("Overall HealthConnect solution", "How my work connects", """
 # 10 Limitations
 slide("Limitations", "What the solution cannot do yet", """
 <ul>
-<li><b>No proven predictor:</b> the DS model has no signal (hold-out AUC 0.467), and my High-Risk label is a constructed rule, not a real outcome</li>
+<li><b>No usable predictor:</b> the DS model has no signal (hold-out AUC 0.467); my High-Risk model passes the release gate only by restating the Age ≥ 65 part of its constructed label</li>
 <li><b>Synthetic data:</b> only 5,000 of 60,000 appointments have full context</li>
-<li><b>Threshold undecided:</b> 0.33 flags 67.6% of patients, too many for follow-up capacity</li>
+<li><b>Flag budget not set:</b> the clinic must choose 10, 20 or 30% from its follow-up capacity</li>
 <li><b>Not production:</b> command-line tool and Python API only; no web service, authentication or monitoring</li>
 <li><b>Fairness:</b> province and facility-type checks not possible with the current data</li></ul>
 <p style='margin-top:24px'><b>Ready to demonstrate, not to make decisions about real patients.</b></p>""")
@@ -192,10 +194,10 @@ slide("Limitations", "What the solution cannot do yet", """
 # 11 Closing
 slide("Closing", "Key takeaway and next steps", """
 <div class='two'><div><h2>Takeaway</h2><p>A model is only useful when others can run it safely and get the same answer. Testing showed the Week 6 code wasn't usable; it now is, and the evidence proves it.</p>
-<h2 style='margin-top:30px'>What I learned</h2><ul><li>Test the pipeline, not just the model</li><li>Report null results honestly</li><li>Collaboration needs agreed contracts</li></ul></div>
+<h2 style='margin-top:30px'>What I learned</h2><ul><li>Test the pipeline, not just the model</li><li>Collaboration needs agreed contracts</li><li>A release gate must be paired with a check of how the target is built</li></ul></div>
 <div><h2>Future version</h2><ul>
-<li>Retrain on real outcomes (attendance, admissions)</li><li>One shared contract with Data Science</li>
-<li>Agree the threshold with the clinic</li><li>Web API, monitoring and fairness checks</li></ul></div></div>
+<li>Retrain on real outcomes (attendance, admissions)</li><li>Clinic sets the flag budget</li>
+<li>Web API, monitoring and fairness checks</li></ul></div></div>
 <p style='margin-top:40px;font-size:38px'><b>Thank you.</b></p>""")
 
 with tempfile.TemporaryDirectory() as tmp:
