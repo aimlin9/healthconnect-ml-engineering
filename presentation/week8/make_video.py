@@ -27,7 +27,9 @@ def main():
     ap.add_argument("--out", default=str(HERE / "HealthConnect_Week8_MLE_Presentation_Ramsey.mp4"))
     ap.add_argument("--one-take", help="single recording covering all slides")
     ap.add_argument("--starts", help="comma-separated start times (mm:ss) of slides 2..N in the one-take recording")
+    ap.add_argument("--recordings", default=str(RECS), help="folder holding slide01.<ext> ... (default: recordings/)")
     args = ap.parse_args()
+    recs = Path(args.recordings)
     for tool in ("ffmpeg", "ffprobe"):
         if not shutil.which(tool):
             sys.exit(f"{tool} not found on PATH")
@@ -39,10 +41,10 @@ def main():
         return one_take(slides, Path(args.one_take), args.starts, args.out)
     pairs, missing = [], []
     for png in slides:
-        audio = next((RECS / f"{png.stem}{e}" for e in EXTS if (RECS / f"{png.stem}{e}").exists()), None)
+        audio = next((recs / f"{png.stem}{e}" for e in EXTS if (recs / f"{png.stem}{e}").exists()), None)
         (pairs.append((png, audio)) if audio else missing.append(png.stem))
     if missing:
-        sys.exit(f"missing recordings in {RECS}: {', '.join(missing)}")
+        sys.exit(f"missing recordings in {recs}: {', '.join(missing)}")
 
     total = 0.0
     with tempfile.TemporaryDirectory() as tmp:

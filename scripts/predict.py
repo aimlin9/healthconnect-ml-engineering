@@ -70,11 +70,22 @@ def main(argv=None):
         log.error("no output written (%d problem(s)); fix the input or use --skip-invalid", len(exc.problems))
         return 2
 
-    # Write the normalised values the model actually scored (e.g. ' female ' -> 'Female').
-    accepted = data.loc[scores.index]
-    clean, _ = validate_input(accepted)
-    accepted.assign(**{c: clean[c] for c in clean.columns}).join(scores).to_csv(args.output, index=False)
-    log.info("wrote %d scored row(s) to %s", len(scores), args.output)
+    # One output row per input row, in input order (Week 8, agreed with Data Science):
+    # scored rows carry the normalised values the model actually scored (' female ' -> 'Female');
+    # rows rejected under --skip-invalid stay in the file with status "REJECTED: <reason>".
+    out = data.astype(object)
+    clean, _ = validate_input(data.loc[scores.index])
+    for c in clean.columns:
+        out.loc[clean.index, c] = clean[c].astype(object)
+    out = out.join(scores)
+    if len(rejected):
+        reasons = rejected.groupby("row")[["column", "problem"]].apply(
+            lambda g: "; ".join(f"{c}: {p}" for c, p in zip(g["column"], g["problem"])))
+        out.loc[reasons.index, "status"] = "REJECTED: " + reasons
+        out.loc[reasons.index, "model_status"] = meta.get("model_status", "")
+    out.to_csv(args.output, index=False)
+    log.info("wrote %d row(s) to %s (%d scored, %d rejected)", len(out), args.output,
+             len(scores), len(out) - len(scores))
     if len(rejected):
         rej_path = Path(args.output).with_suffix(".rejected.csv")
         rejected.insert(0, "csv_line", rejected["row"].map(csv_line))

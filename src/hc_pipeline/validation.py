@@ -33,13 +33,14 @@ def validate_input(data, errors="raise"):
         data = pd.DataFrame([data])
     if not isinstance(data, pd.DataFrame):
         raise TypeError(f"expected a pandas DataFrame or dict, got {type(data).__name__}")
-    if data.empty:
-        raise InputValidationError([("-", "-", "input has no rows")])
-
     missing = [c for c in FEATURES if c not in data.columns]
     if missing:
         # Structural problem: no row can be scored, so this always raises.
         raise InputValidationError([("all", c, "required column missing") for c in missing])
+    if data.empty:
+        # Week 8 (D-08, agreed with Data Science): empty input gives empty output, not an error.
+        log.info("input has no rows; nothing to score")
+        return data[FEATURES].copy(), pd.DataFrame(columns=["row", "column", "problem"])
     extra = sorted(set(data.columns) - set(FEATURES))
     if extra:
         log.debug("ignoring %d non-model column(s): %s", len(extra), extra)

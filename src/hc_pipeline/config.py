@@ -9,6 +9,12 @@ META_PATH = ROOT / "models" / "high_risk_pipeline_meta.json"
 MODEL_VERSION = "1.1.0-week7"
 TARGET = "HighRiskPatient"
 
+# Shown on every scored row (agreed with Data Science, Week 8): each model carries its own
+# status, and only a model that passes the release gate on real outcomes is called usable.
+# Evidence: reports/week8/evidence/release_gate_high_risk.json.
+MODEL_STATUS = ("DEMO ONLY - passes the statistical release gate but restates its constructed label "
+                "(Age>=65 alone scores the same AUC); not for clinical or operational decisions")
+
 # Canonical category values. Matching at inference is case/whitespace-insensitive.
 CATEGORICAL = {
     "Gender": ["Female", "Male"],

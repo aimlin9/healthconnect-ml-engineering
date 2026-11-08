@@ -63,20 +63,25 @@ model, meta = load()
 
 
 def mle_score_fn(df):
-    """The ML Engineering pipeline, with output shaped to the DS contract."""
+    """The ML Engineering pipeline, with output shaped to the DS contract.
+
+    Since Week 8 the pipeline returns its own per-row `status` (SCORED / SCORED_WITH_WARNINGS)
+    and empty output for empty input; the adapter only adds REJECTED rows and renames
+    risk_probability -> risk_score.
+    """
     data = df.rename(columns={"PriorVisits": "PriorAppointmentsCount"}).reset_index(drop=True)
     try:
         scores, rejected = predict(model, meta, data, errors="skip")
     except InputValidationError as exc:
-        if any(row == "all" for row, _, _ in exc.problems) or data.empty:
-            raise  # structural problem (missing column / no rows): the pipeline refuses the batch
-        scores = pd.DataFrame(columns=["risk_probability"], index=data.index[:0])
+        if any(row == "all" for row, _, _ in exc.problems):
+            raise  # structural problem (missing column): the pipeline refuses the batch
+        scores = pd.DataFrame(columns=["risk_probability", "status"], index=data.index[:0])
         rejected = pd.DataFrame(exc.problems, columns=["row", "column", "problem"])
-    reasons = rejected.groupby("row").apply(
+    reasons = rejected.groupby("row")[["column", "problem"]].apply(
         lambda g: "; ".join(f"{c}: {p}" for c, p in zip(g["column"], g["problem"]))) if len(rejected) else {}
     out = pd.DataFrame({
-        "risk_score": scores["risk_probability"].reindex(data.index),
-        "status": ["REJECTED: " + reasons[i] if i in reasons else "SCORED" for i in data.index],
+        "risk_score": scores["risk_probability"].reindex(data.index).astype(float),
+        "status": [("REJECTED: " + reasons[i]) if i in reasons else scores.at[i, "status"] for i in data.index],
     })
     out.index = df.index
     return out

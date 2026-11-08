@@ -45,13 +45,12 @@
     ]
   },
   "B_mle_pipeline_vs_ds_contract": {
-    "passed": 11,
+    "passed": 12,
     "of": 15,
     "failed": [
       "C3",
       "C4",
-      "C5",
-      "C13"
+      "C5"
     ]
   }
 }

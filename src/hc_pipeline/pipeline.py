@@ -22,8 +22,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
 
-from .config import (CATEGORICAL, FEATURES, META_PATH, MODEL_PATH, MODEL_VERSION, NUMERIC,
-                     RANDOM_STATE, RF_PARAMS, TARGET, TARGET_RECALL)
+from .config import (CATEGORICAL, FEATURES, META_PATH, MODEL_PATH, MODEL_STATUS, MODEL_VERSION,
+                     NUMERIC, RANDOM_STATE, RF_PARAMS, TARGET, TARGET_RECALL)
 from .validation import validate_input
 
 log = logging.getLogger("hc_pipeline")
@@ -81,6 +81,7 @@ def data_fingerprint(df):
 def save(model, threshold, X_train, test_metrics, model_path=MODEL_PATH, meta_path=META_PATH):
     meta = {
         "model_version": MODEL_VERSION,
+        "model_status": MODEL_STATUS,
         "trained_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "sklearn_version": sklearn.__version__,
         "features": FEATURES,
@@ -115,21 +116,29 @@ def load(model_path=MODEL_PATH, meta_path=META_PATH):
 
 def predict(model, meta, data, errors="raise"):
     """Validate input and return one row per accepted input row (original index kept):
-    risk_probability, high_risk_flag, threshold, model_version. Rejected rows (errors="skip")
-    are returned as a second DataFrame."""
+    risk_probability, high_risk_flag, threshold, model_version, status, model_status.
+    status is SCORED, or SCORED_WITH_WARNINGS: <reason> when a value lies outside the training
+    range. Rejected rows (errors="skip") are returned as a second DataFrame."""
     start = time.perf_counter()
     X, rejected = validate_input(data, errors=errors)
+    columns = ["risk_probability", "high_risk_flag", "threshold", "model_version", "status", "model_status"]
+    if X.empty:
+        return pd.DataFrame(columns=columns, index=X.index), rejected
+    warnings = pd.Series("", index=X.index)
     for col, (lo, hi) in meta.get("training_range", {}).items():
-        outside = int(((X[col] < lo) | (X[col] > hi)).sum())
-        if outside:
+        mask = (X[col] < lo) | (X[col] > hi)
+        if mask.any():
             log.warning("%d row(s) have %s outside the training range [%d, %d]; "
-                        "prediction is an extrapolation", outside, col, lo, hi)
+                        "prediction is an extrapolation", int(mask.sum()), col, lo, hi)
+            warnings[mask] += f"{col} outside training range [{lo}, {hi}]; "
     proba = model.predict_proba(X)[:, 1]
     out = pd.DataFrame({
         "risk_probability": proba.round(4),
         "high_risk_flag": (proba >= meta["threshold"]).astype(int),
         "threshold": meta["threshold"],
         "model_version": meta["model_version"],
+        "status": np.where(warnings == "", "SCORED", "SCORED_WITH_WARNINGS: " + warnings.str.rstrip("; ")),
+        "model_status": meta.get("model_status", MODEL_STATUS),
     }, index=X.index)
     log.info("scored %d row(s), flagged %d high-risk, rejected %d, %.1f ms",
              len(out), int(out["high_risk_flag"].sum()),

@@ -25,6 +25,8 @@
     "risk_probability",
     "high_risk_flag",
     "threshold",
-    "model_version"
+    "model_version",
+    "status",
+    "model_status"
   ]
 }

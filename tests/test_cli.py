@@ -38,8 +38,21 @@ def test_cli_skip_invalid_writes_rejects_file(tmp_path, sample_rows):
     rows.to_csv(src, index=False)
     r = run(src, dst, "--skip-invalid")
     assert r.returncode == 0, r.stderr
-    assert len(pd.read_csv(dst)) == 9
+    out = pd.read_csv(dst)
+    assert len(out) == 10  # one output row per input row, in input order
+    assert out["status"].iloc[0].startswith("REJECTED: VisitType: unknown category 'Telehealth'")
+    assert pd.isna(out["risk_probability"].iloc[0])
+    assert (out["status"].iloc[1:] == "SCORED").all()
     assert len(pd.read_csv(tmp_path / "out.rejected.csv")) == 1
+
+
+def test_cli_empty_input_writes_header_only(tmp_path, sample_rows):
+    src, dst = tmp_path / "in.csv", tmp_path / "out.csv"
+    sample_rows.head(0).to_csv(src, index=False)
+    r = run(src, dst)
+    assert r.returncode == 0, r.stderr
+    out = pd.read_csv(dst)
+    assert out.empty and {"risk_probability", "status"} <= set(out.columns)
 
 
 def test_cli_reports_csv_line_numbers(tmp_path, sample_rows):

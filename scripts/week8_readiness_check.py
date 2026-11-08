@@ -80,6 +80,7 @@ cases = [
     ("outside training range (Age 110) -> scored with warning", [{**good, "Age": 110}], [], 0),
     ("threshold override out of range", [good], ["--threshold", "1.5"], 2),
     ("input file does not exist", None, [], 2),
+    ("empty input (header only) -> empty output", [], [], 0),
 ]
 rows = []
 with tempfile.TemporaryDirectory() as tmp:
@@ -87,14 +88,15 @@ with tempfile.TemporaryDirectory() as tmp:
     for i, (name, data, flags, expected) in enumerate(cases):
         inp, out = tmp / f"in_{i}.csv", tmp / f"out_{i}.csv"
         if data is not None:
-            pd.DataFrame(data).to_csv(inp, index=False)
+            pd.DataFrame(data, columns=list(good) if not data else None).to_csv(inp, index=False)
         r = subprocess.run([sys.executable, str(PREDICT), str(inp), str(out), *flags],
                            capture_output=True, text=True, cwd=ROOT)
         log_lines = [ln.split(": ", 1)[-1] for ln in r.stderr.splitlines()
                      if " ERROR " in ln or " WARNING " in ln]
         rows.append({"case": name, "expected_exit": expected, "exit_code": r.returncode,
                      "output_written": out.exists(),
-                     "rows_scored": len(pd.read_csv(out)) if out.exists() else 0,
+                     "rows_scored": int((~pd.read_csv(out)["status"].str.startswith("REJECTED")).sum())
+                                    if out.exists() else 0,
                      "first_message": (log_lines[0] if log_lines else "").replace(str(tmp), "<tmp>")
                                       .replace(str(tmp).replace("\\", "\\\\"), "<tmp>"),
                      "pass": r.returncode == expected and out.exists() == (expected == 0)})

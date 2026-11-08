@@ -49,9 +49,16 @@ def test_non_tabular_input_rejected(bad_input):
         validate_input(bad_input)
 
 
-def test_empty_input_rejected(sample_rows):
-    with pytest.raises(InputValidationError, match="no rows"):
-        validate_input(sample_rows.head(0))
+def test_empty_input_returns_empty(sample_rows):
+    # Week 8 (D-08, agreed with Data Science): empty in, empty out.
+    clean, rejected = validate_input(sample_rows.head(0))
+    assert clean.empty and rejected.empty
+    assert list(clean.columns) == config.FEATURES
+
+
+def test_empty_input_still_needs_required_columns(sample_rows):
+    with pytest.raises(InputValidationError, match="Age.*required column missing"):
+        validate_input(sample_rows.head(0).drop(columns="Age"))
 
 
 def test_missing_column_named(sample_rows):

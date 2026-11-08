@@ -11,6 +11,6 @@ C9,Numbers sent as text ('45'),"Coerced, same scores",PASS,numeric strings coerc
 C10,Non-numeric value ('abc') in Age,"Bad row rejected, rest of batch scored",PASS,"row 1 rejected, rows 2-5 scored"
 C11,"Impossible values (Age 250, PriorVisits -3)","Bad rows rejected, rest scored",PASS,"Age=250 and PriorVisits=-3 rejected, rest scored"
 C12,"Wrong text case ('female','MALARIA')","Normalised, same scores",PASS,case differences normalised
-C13,Empty input,"Empty output, no crash",FAIL,"EXCEPTION InputValidationError: 1 input problem(s): row -, -: input has no rows"
+C13,Empty input,"Empty output, no crash",PASS,empty input returns empty output
 C14,Repeat call determinism,Identical output,PASS,identical output on repeat call
 C15,Duplicate row index,Scored,PASS,duplicate index handled

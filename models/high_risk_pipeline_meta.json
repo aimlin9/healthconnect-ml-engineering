@@ -1,5 +1,6 @@
 {
   "model_version": "1.1.0-week7",
+  "model_status": "DEMO ONLY - passes the statistical release gate but restates its constructed label (Age>=65 alone scores the same AUC); not for clinical or operational decisions",
   "trained_at": "2026-11-01T16:02:19+00:00",
   "sklearn_version": "1.9.1",
   "features": [

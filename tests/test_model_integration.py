@@ -32,13 +32,32 @@ def test_row_scores_independent_of_batch(artifact, sample_rows):
 def test_output_contract(artifact, sample_rows):
     model, meta = artifact
     out, rejected = predict(model, meta, sample_rows)
-    assert list(out.columns) == ["risk_probability", "high_risk_flag", "threshold", "model_version"]
+    assert list(out.columns) == ["risk_probability", "high_risk_flag", "threshold", "model_version",
+                                 "status", "model_status"]
     assert out.index.equals(sample_rows.index)
     assert out["risk_probability"].between(0, 1).all()
     assert set(out["high_risk_flag"]) <= {0, 1}
     assert ((out["risk_probability"] >= meta["threshold"]).astype(int) == out["high_risk_flag"]).all()
     assert (out["model_version"] == config.MODEL_VERSION).all()
+    assert (out["status"] == "SCORED").all()
+    assert out["model_status"].str.startswith("DEMO ONLY").all()
     assert rejected.empty
+
+
+def test_extrapolation_visible_in_row_status(artifact, sample_rows):
+    model, meta = artifact
+    rows = sample_rows.head(2).copy()
+    rows.iloc[0, rows.columns.get_loc("Age")] = 110  # valid, but above the training max of 90
+    out, _ = predict(model, meta, rows)
+    assert out["status"].iloc[0] == "SCORED_WITH_WARNINGS: Age outside training range [0, 90]"
+    assert out["status"].iloc[1] == "SCORED"
+
+
+def test_empty_input_returns_empty_output(artifact, sample_rows):
+    model, meta = artifact
+    out, rejected = predict(model, meta, sample_rows.head(0))
+    assert out.empty and rejected.empty
+    assert "status" in out.columns
 
 
 def test_invalid_input_never_reaches_model(artifact, sample_rows):

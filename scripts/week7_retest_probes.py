@@ -59,7 +59,9 @@ probe("W6-06", lambda: accepted_silently(raw_test.head(5).drop(columns="Departme
 probe("W6-07", lambda: scored(raw_test.head(5).astype({"Age": str}), 5))
 probe("W6-08", lambda: accepted_silently(raw_test.head(2).assign(Age=[-5, 250])), True)
 probe("W6-09", lambda: accepted_silently(raw_test.head(2).assign(Age=np.nan)), True)
-probe("W6-10", lambda: accepted_silently(raw_test.head(0)), True)
+# Week 8 (D-08, agreed with Data Science): empty input now returns empty output instead of
+# raising, so the pass condition changed from "clear error" to "0 rows out, no crash".
+probe("W6-10", lambda: scored(raw_test.head(0), 0))
 
 
 def p_determinism():
