@@ -8,7 +8,8 @@ Data Science (E. E. Arhin) handed over an admission-proxy scorer package with a
      (DS request 1: "run python hc_contract_tests.py, report versions and pass count").
   B. The same 15 tests against the ML Engineering pipeline's scoring function
      (DS request 2: "run_contract_tests(your_score_fn, sample_df) with your own
-     preprocessing in front"). The adapter only translates output format —
+     preprocessing in front"). From DS interface v1.1 (8 Nov) this runs with the
+     agreed strict policy: run_contract_tests(score_fn, sample, strict=True). The adapter only translates output format —
      risk_probability -> risk_score, rejected rows -> status "REJECTED: <reason>" —
      and maps the DS column name PriorVisits to PriorAppointmentsCount (same concept).
      Validation behaviour is the pipeline's own; nothing is relaxed to pass a test.
@@ -54,7 +55,7 @@ with warnings.catch_warnings(record=True) as caught:
     warnings.simplefilter("always")
     scorer = AdmissionProxyScorer(DS)
 ds_sample = pd.read_csv(DS / "sample_input.csv", keep_default_na=False, na_values=[""])
-res_a = run_contract_tests(scorer.score, ds_sample)
+res_a = run_contract_tests(scorer.score, ds_sample, strict=getattr(scorer, "strict", False))
 res_a.to_csv(OUT / "A_ds_package_in_mle_env.csv", index=False)
 version_warnings = sorted({str(w.message).split(" This might")[0] for w in caught})
 
@@ -91,11 +92,12 @@ df = add_prior_appointments(pd.read_csv(config.FEATURES_CSV))
 mle_sample = (df[config.FEATURES].sample(20, random_state=config.RANDOM_STATE)
               .rename(columns={"PriorAppointmentsCount": "PriorVisits"}).reset_index(drop=True))
 mle_sample.to_csv(OUT / "B_mle_sample_input.csv", index=False)
-res_b = run_contract_tests(mle_score_fn, mle_sample)
+res_b = run_contract_tests(mle_score_fn, mle_sample, strict=True)  # agreed shared contract (D-10)
 res_b.to_csv(OUT / "B_mle_pipeline_vs_ds_contract.csv", index=False)
 
 # C. Schema comparison --------------------------------------------------------
-ds_cols = {**{c: "number" for c in ds_schema["numeric"]}, **{c: "category" for c in ds_schema["categorical"]}}
+ds_cols = {**{c: ("integer" if spec.get("integer") else "number") for c, spec in ds_schema["numeric"].items()},
+           **{c: "category" for c in ds_schema["categorical"]}}
 mle_cols = {**{c: "integer" for c in config.NUMERIC}, **{c: "category" for c in config.CATEGORICAL}}
 alias = {"PriorVisits": "PriorAppointmentsCount"}
 rows = []
@@ -129,6 +131,7 @@ summary = {
     "environment": env,
     "D_mle_data_into_ds_scorer": integration,
     "ds_package": {"model": ds_schema["model_name"], "version": ds_schema["version"],
+                   "policy": ds_schema.get("policy", "soft"),
                    "trained_with": {"python": ds_schema["python_version"], "sklearn": ds_schema["sklearn_version"]},
                    "release_gate_passed": ds_schema["release_gate"]["passed"]},
     "A_ds_package_unchanged": {"passed": int((res_a.Result == "PASS").sum()), "of": len(res_a),

@@ -23,7 +23,8 @@
   },
   "ds_package": {
     "model": "HealthConnect admission-proxy scorer (refined)",
-    "version": "w7-1.0",
+    "version": "w8-1.1",
+    "policy": "strict",
     "trained_with": {
       "python": "3.14.6",
       "sklearn": "1.9.0"
@@ -45,12 +46,8 @@
     ]
   },
   "B_mle_pipeline_vs_ds_contract": {
-    "passed": 12,
+    "passed": 15,
     "of": 15,
-    "failed": [
-      "C3",
-      "C4",
-      "C5"
-    ]
+    "failed": []
   }
 }

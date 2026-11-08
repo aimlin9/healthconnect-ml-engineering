@@ -1,9 +1,9 @@
 ds_column,mle_column,ds_type,mle_type,ds_valid,mle_valid
-Age,Age,number,integer,"[0.0, 110.0]","[0, 120]"
+Age,Age,integer,integer,"[0.0, 120.0]","[0, 120]"
 ,DepartmentWorkload,,integer,null,"[0, 100000]"
 Diagnosis,,category,,"[""Diabetes"", ""Gastritis"", ""Hypertension"", ""Malaria"", ""Upper Respiratory Infection""]",null
 ,DoctorYearsExperience,,integer,null,"[0, 60]"
 Gender,Gender,category,category,"[""Female"", ""Male""]","[""Female"", ""Male""]"
-HasChronic,,number,,"[0.0, 1.0]",null
-PriorVisits,PriorAppointmentsCount,number,integer,"[0.0, 50.0]","[0, 1000]"
+HasChronic,,integer,,"[0.0, 1.0]",null
+PriorVisits,PriorAppointmentsCount,integer,integer,"[0.0, 50.0]","[0, 1000]"
 ,VisitType,,category,null,"[""Consultation"", ""Emergency"", ""Follow-up""]"

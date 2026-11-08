@@ -4,9 +4,9 @@
 Stage: Final Integration → Project Readiness → Presentation → Showcase
 
 > Data Science contract tests ran on 7 Nov 2026; Data Science replied on 8 Nov and the agreed
-> changes are implemented and retested (§7, `reports/week8/decision_log.md`). The only open item is
-> Data Science's strict-mode harness (ISS-17). Nothing here claims an integration result that has
-> not happened.
+> changes are implemented on both sides and retested: Data Science's v1.1 strict harness passes
+> 15/15 against this pipeline (§7, `reports/week8/decision_log.md`). Nothing here claims an
+> integration result that has not happened.
 
 ---
 
@@ -95,8 +95,8 @@ recall 0.785, precision 0.492; flags 67.6% of patients.
 | Error-handling matrix (Week 8) | 12/12 cases give the specified exit code and output (adds empty input) | `reports/week8/evidence/error_handling_matrix.csv` |
 | End-to-end CLI run (Week 8) | 1,250/1,250 test rows scored; CLI output identical to in-process `predict()`; IDs carried through; ROC-AUC 0.721 | `reports/week8/evidence/end_to_end_check.json` |
 | Reproducibility (Week 8) | Identical — see §6 | `reports/week8/evidence/reproducibility_check.json` |
-| DS contract tests, DS package unchanged | 15/15 (Py 3.12.10 / sklearn 1.9.1 and Py 3.14.6 / 1.9.0) | `reports/week8/evidence/ds_contract/` |
-| DS contract tests against my pipeline | 11/15 on 7 Nov → **12/15** on 8 Nov after the agreed changes. C3–C5 wait on the DS strict harness (ISS-17) | `ds_contract/B_mle_pipeline_vs_ds_contract.csv` |
+| DS contract tests, DS package unchanged | 15/15 (v1.0: Py 3.12.10 / sklearn 1.9.1 and Py 3.14.6 / 1.9.0; v1.1 strict: Py 3.12.10 / 1.9.1) | `reports/week8/evidence/ds_contract/` |
+| DS contract tests against my pipeline | 11/15 on 7 Nov → 12/15 after the agreed changes → **15/15** with the DS v1.1 strict harness (8 Nov, ISS-17 closed) | `ds_contract/B_mle_pipeline_vs_ds_contract.csv` |
 | My data → DS scorer | 5,000/5,000 scored, 0 rejected | `ds_contract/summary.json` |
 
 ## 5a. Error-Handling Evidence
@@ -145,10 +145,10 @@ integrated. Full reply: `reports/week8/DS_Handoff_Response.md`.
 | Package safety | Code reviewed before running; pickle checked to contain only numpy, joblib and sklearn classes |
 | Versions | Python 3.12.10 / scikit-learn 1.9.1 (pipeline env), and 3.14.6 / 1.9.0 (DS training env) |
 | DS package, unchanged | **15/15** in both environments; version warnings under 1.9.1 but scores identical (max diff 0.0) |
-| DS tests against my pipeline | **11/15** on 7 Nov (C3, C4, C5, C13) → **12/15** on 8 Nov (C13 fixed; C3–C5 await the DS strict harness) |
-| Why they fail | Policy difference, not a bug. DS scores soft problems and flags them; my pipeline rejects them (decision D-02). My pipeline raises on empty input; theirs returns empty output |
+| DS tests against my pipeline | **11/15** on 7 Nov (C3, C4, C5, C13) → **12/15** on 8 Nov (C13 fixed) → **15/15** with the DS v1.1 strict harness (C3–C5 now expect rejection) |
+| Why they failed | Policy difference, not a bug. DS scored soft problems and flagged them; my pipeline rejects them (decision D-02). My pipeline raised on empty input; theirs returned empty output. Both resolved by the shared contract (D-08 to D-11) |
 | My data pipeline → DS scorer | All 5,000 rows scored after two column renames; 0 rejected; top-20% budget flagged exactly 20.0% |
-| Schema mismatches | Age max 110 vs 120; whole numbers required (mine) vs floats accepted (theirs); `PriorVisits` vs `PriorAppointmentsCount` (point-in-time definition to confirm) |
+| Schema mismatches (7 Nov) | Age max 110 vs 120; whole numbers required (mine) vs floats accepted (theirs); `PriorVisits` vs `PriorAppointmentsCount` (point-in-time definition to confirm). All resolved: DS v1.1 uses Age 0–120 and whole numbers; PriorVisits confirmed point-in-time |
 | Time-point constraint | DS model needs Diagnosis, so it can only run after consultation; it will not be wired to a booking trigger (DS issue I10) |
 | What changed as a result | DS agreed (8 Nov). **ML Eng:** per-row `status` and `model_status` on every output row, rejected rows kept in output, empty input → empty output (D-08, D-09). **DS:** strict reject option, Age 120, whole numbers (D-10, D-11). PriorVisits confirmed point-in-time |
 
@@ -189,7 +189,7 @@ or appointment decisions about real patients.
 | 1 | Track | Data Science | Project Management |
 | 2 | Dependency | DS owns the final model, target and threshold; ML Eng owns the scoring interface | PM needs component status, issues and demo requirements |
 | 3 | Output received | Final model package, requirements note and `hc_contract_tests.py` (7 Nov) | PENDING (presentation slot / sequence) |
-| 4 | Output provided | `DS_Handoff_Response.md` (7 Nov) and `DS_Reply_2.md` (8 Nov): versions, test results, schema comparison, requirements, High-Risk model target, hold-out metrics and gate result | This package; issue log; decision log; readiness status (§2) |
+| 4 | Output provided | `DS_Handoff_Response.md` (7 Nov), `DS_Reply_2.md` and `DS_Reply_3.md` (8 Nov, v1.1 retest 15/15): versions, test results, schema comparison, requirements, High-Risk model target, hold-out metrics and gate result | This package; issue log; decision log; readiness status (§2) |
 | 5 | Integration activity | Ran the DS tests on their package and on my pipeline; fed all 5,000 pipeline rows into the DS scorer | Hand over §1, §2, §8 for the project status report and risk register |
 | 6 | What changed | One shared row-level contract (status column, rejects, empty→empty, limits); High-Risk model relabelled DEMO ONLY after the DS gate; threshold replaced by a flag budget | PENDING |
 | 7 | How it improves the solution | One agreed interface contract instead of two that silently disagree; confirmed the pipeline's data can feed the DS model | — |
@@ -198,10 +198,10 @@ or appointment decisions about real patients.
 
 ## 10. Demonstration Workflow (≈2 minutes in the walkthrough)
 
-1. `pytest -q` → 61 passed.
+1. `pytest -q` → 65 passed.
 2. Score one patient: `python scripts/predict.py demo_patient.csv out.csv` → show `risk_probability`, flag, model version.
 3. Show a bad row (Age 250) rejected with CSV line and reason; rerun with `--skip-invalid`.
 4. `python scripts/week8_readiness_check.py` → reproducibility identical, 12/12 error cases, end-to-end match.
-5. DS contract tests: `python scripts/week8_ds_contract_crosscheck.py <DS package>` → DS package 15/15; my pipeline 12/15 (C3–C5 await the DS strict harness).
+5. DS contract tests: `python scripts/week8_ds_contract_crosscheck.py <DS package>` → DS package 15/15; my pipeline 15/15 (DS v1.1 strict harness).
 5a. `python scripts/week8_release_gate.py` → gate passed, but `Age ≥ 65` alone gives the same AUC, so DEMO ONLY.
 6. Close on limitations: demonstration-ready, not for real patient decisions.

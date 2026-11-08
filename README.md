@@ -6,8 +6,8 @@
 > **Week 8 (Final Integration → Presentation):** the pipeline reproduces identically on a second
 > OS and Python version, handles 12/12 error cases as specified, and was integrated with the Data
 > Science final model package: their 15 contract tests pass 15/15 here. After agreeing one shared
-> contract with Data Science (per-row `status`, empty in → empty out), 12/15 pass against this pipeline
-> (C3–C5 await their strict-mode harness). The High-Risk model passes the DS release gate but `Age ≥ 65`
+> contract with Data Science (per-row `status`, empty in → empty out, strict rejection), their v1.1
+> harness passes **15/15 against this pipeline**. The High-Risk model passes the DS release gate but `Age ≥ 65`
 > alone scores the same AUC, so it is labelled **DEMO ONLY**. See [Week 8](#week-8--final-integration--presentation).
 
 > **Week 7 (Testing → Refinement → Validation):** the Week 6 High-Risk Patient model is now a
@@ -166,8 +166,8 @@ Input columns: `Gender`, `VisitType`, `Age`, `DoctorYearsExperience`, `PriorAppo
 | Error handling (CLI exit codes and messages) | 12/12 cases as specified | `reports/week8/evidence/error_handling_matrix.csv` |
 | End-to-end (1,250 test rows through the CLI) | CLI output identical to in-process `predict()`; ROC-AUC 0.721 | `reports/week8/evidence/end_to_end_check.json` |
 | Data Science package, their 15 contract tests | 15/15 (Py 3.12.10 / sklearn 1.9.1 and Py 3.14.6 / 1.9.0) | `reports/week8/evidence/ds_contract/` |
-| Same 15 tests against this pipeline | 11/15 → 12/15 after the agreed changes; C3–C5 wait on the DS strict harness (DS agreed to reject, not impute) |
-| DS release gate on the High-Risk model | AUC 0.721 (CI 0.691–0.752), shuffle p = 0.0099, lift 1.82 @ 20%: passes, **but** `Age ≥ 65` alone also gives 0.721 → DEMO ONLY | `reports/week8/evidence/release_gate_high_risk.json` | `ds_contract/B_mle_pipeline_vs_ds_contract.csv` |
+| Same 15 tests against this pipeline | 11/15 (7 Nov) → 12/15 after the agreed changes → **15/15** with the DS v1.1 strict harness (8 Nov) | `ds_contract/B_mle_pipeline_vs_ds_contract.csv` |
+| DS release gate on the High-Risk model | AUC 0.721 (CI 0.691–0.752), shuffle p = 0.0099, lift 1.82 @ 20%: passes, **but** `Age ≥ 65` alone also gives 0.721 → DEMO ONLY | `reports/week8/evidence/release_gate_high_risk.json` |
 | This pipeline's data into the DS scorer | 5,000/5,000 scored, 0 rejected | `ds_contract/summary.json` |
 
 The Data Science model is a validated null result (hold-out AUC 0.467). It is integrated as an
@@ -186,7 +186,7 @@ python presentation/week8/make_video.py                              # slides + 
 | Week 8 Deliverable | Location |
 |---|---|
 | Final ML Pipeline & Engineering Package (transition, readiness, pipeline, config, testing, error handling, reproducibility, limitations, HC-POD integration, demo workflow) | `reports/week8/ML_Engineering_Final_Package.md` |
-| Response to the Data Science hand-off | `reports/week8/DS_Handoff_Response.md`, `reports/week8/DS_Reply_2.md` |
+| Response to the Data Science hand-off | `reports/week8/DS_Handoff_Response.md`, `reports/week8/DS_Reply_2.md`, `reports/week8/DS_Reply_3.md` (v1.1 retest, 15/15) |
 | Week 8 decision & issue log | `reports/week8/decision_log.md` |
 | Integration and readiness evidence | `reports/week8/evidence/` |
 | Presentation slides | `presentation/week8/HealthConnect_Week8_MLE_Slides_Ramsey.pdf`, `presentation/week8/slides/` |
@@ -198,5 +198,5 @@ python presentation/week8/make_video.py                              # slides + 
 Week 6 submission — complete.
 Week 7 — pipeline tested, refined and retested.
 Week 8 — reproducibility, error handling and end-to-end checks pass; Data Science package received and tested
-(15/15 on their package); shared contract agreed and implemented (12/15, C3–C5 waiting on the DS strict harness);
+(15/15 on their package); shared contract agreed and implemented on both sides (15/15 against this pipeline with the DS v1.1 harness);
 High-Risk model gated and labelled demo-only; threshold replaced by a clinic-chosen flag budget.

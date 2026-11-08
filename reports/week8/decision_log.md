@@ -22,7 +22,7 @@ with Data Science (E. E. Arhin) on 8 Nov 2026 in reply to `DS_Handoff_Response.m
 | ISS-09 Threshold flags 67.6% | Open (DS + clinic) | **Superseded by D-13**: flag budget + lift; percentage to be set by the clinic | `release_gate_high_risk.json` → `lift` |
 | ISS-12 Constructed target | Open, documented | **Confirmed and quantified**: the model's AUC equals that of `Age>=65` alone | `release_gate_high_risk.json` → `rule_restatement_check` |
 | ISS-15 Integration interface | Open (Week 8) | **Resolved for the demo**: shared row-level contract (D-08 to D-11); CLI + Python API | `ds_contract/`, tests |
-| ISS-17 DS harness expects imputation for C3–C5 | New | **Open (DS)**: DS ships `hc_scorer.py` strict option and updated expectations; then re-run | `ds_contract/B_mle_pipeline_vs_ds_contract.csv` (12/15) |
+| ISS-17 DS harness expects imputation for C3–C5 | New | **Closed (8 Nov).** DS shipped interface v1.1: strict policy by default, Age 0–120, whole numbers, C3–C5 expect rejection, C11 adds Age 2.5. Re-run: 15/15 against this pipeline, no expectation changes needed | `ds_contract/B_mle_pipeline_vs_ds_contract.csv` (15/15), `summary.json` |
 
 ## Retest after the changes (8 Nov 2026)
 
@@ -30,6 +30,6 @@ with Data Science (E. E. Arhin) on 8 Nov 2026 in reply to `DS_Handoff_Response.m
 |---|---|---|
 | Automated tests | 61/61 | 65/65 (3 updated for D-08/D-09, 4 added) |
 | Error-handling matrix | 11/11 | 12/12 (adds empty input) |
-| DS contract tests against this pipeline (current DS harness) | 11/15 (C3, C4, C5, C13) | 12/15 (C3, C4, C5: DS harness still expects imputation, ISS-17) |
-| DS package in this environment | 15/15 | 15/15 |
+| DS contract tests against this pipeline | 11/15 (C3, C4, C5, C13) | 12/15 with DS v1.0 harness (C3–C5 expected imputation) → **15/15 with DS v1.1 strict harness** |
+| DS package in this environment | 15/15 (v1.0) | 15/15 (v1.1, strict policy) |
 | Reproducibility | Identical | Identical |
